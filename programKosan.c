@@ -19,11 +19,12 @@ void title() {
     printf("|              Sernia Kost               |\n");
     printf("|  JL. Jimbaran Kiri, Kanan Dikit,Bali   |\n");
     printf("=========================================\n");
+    printf("            Enter To Continue             ");
     getchar();
     };
 
  calculatePrice() {
-    printf("Masukkan Jumlah Bulan Yang Dibayar : ");
+    printf("Masukkan Jumlah Bulan Yang Akan Dibayar : ");
     scanf("%d", &month);
 
     total_price = month * rental_price;
