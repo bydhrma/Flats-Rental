@@ -6,12 +6,9 @@ float total_price;
 float penalty;
 float discount;
 float totalWFine;
-float withElectricity;
 int month;
 int day;
-int roomType;
 char type;
-char electricity;
 
 //karin
 void title() {
@@ -30,38 +27,32 @@ void title() {
     getchar();
     };
 
-electricityCondition() {
-    printf("|  1. Include Listrik                   |\n");
-    printf("|  2. Tidak Include Listrik             |\n");
-    printf("-----------------------------------------\n");
-    printf("   Masukkan Pilihan:   ");
-    scanf(" %c", &electricity);  // Use & to get the address of the variable
-
-    switch (electricity) {
-        case '1':
-            withElectricity = rental_price + 200000;
-            break;
-
-        case '2':
-            withElectricity = rental_price;
-            break;
-    }
-    calculatePrice();
-}
-
 //bayu
  calculatePrice() {
-
     printf("  Masukkan Jumlah Bulan Yang Akan Dibayar : ");
     scanf("%d", &month);
 
-    if (month <= 12){
-    total_price = month * withElectricity;
+    if (month < 12){
+    total_price = month * rental_price;
     } else {
-    discount = 0.01 * month * withElectricity;
-    total_price = (month * withElectricity) - discount;
+    discount = 0.01 * month * rental_price;
+    total_price = (month * rental_price) - discount;
     }
- }   
+ }    
+ 
+ //jea
+finePrice(){
+    printf("  Masukkan Tanggal Bayar : "); 
+    scanf("%d", &day);
+
+    if (day >= 15){
+        penalty = 0.15 * total_price;
+        printf(" Denda: %lf", penalty);
+    } else {
+        penalty = 0;
+        printf(" Tidak Terdapat Denda");
+    }
+}
 
 int main (){
     title();
@@ -71,10 +62,10 @@ int main (){
     printf("=========================================\n");
     printf("|  TIPE KAMAR                           |\n");
     printf("|  1. Standard                          |\n");
-    printf("|  2. Deluxe                            |\n");
-    printf("|  3. Grand Deluxe                      |\n");
+    printf("|  2. Deluxe                            |\n"); //include aer
+    printf("|  3. Grand Deluxe                      |\n"); //include aer sama listrik
     printf("-----------------------------------------\n");
-    printf("   Pilihan Tipe Kamar:   ");
+    printf("  Pilihan Tipe Kamar:   ");
     type = getchar();
     fflush(stdin);
 
@@ -83,31 +74,34 @@ int main (){
     {
      case '1':
      rental_price += 800000;
-     electricityCondition();
+     calculatePrice();
      break;
 
      case '2':
      rental_price += 1000000;
-     electricityCondition();
+     calculatePrice();
      break;
 
      case '3':
      rental_price += 1200000;
-     electricityCondition();
+     calculatePrice();
      break;
 
     }
 
+    finePrice();
+
+    system("cls");
      printf("\n");
      printf("==================================================================\n");
      printf("                     TOTAL PEMBAYARAN KOS                         \n");
      printf("==================================================================\n");
      printf("   Tipe                   : %c \n", type);
      printf("   Tanggal                : %d \n", day);
-     printf("   Jumlah Bulan           : %d \n", month);
      printf("   Harga Kamar Perbulan   : Rp.%2.lf  \n", total_price);
+     printf("   Denda                  : Rp.%2.lf  \n", penalty);
      printf("==================================================================\n");
-     printf("   Total Biaya            : Rp.%2.lf   \n", totalWFine = total_price);
+     printf("   Total Biaya            : Rp.%2.lf   \n", totalWFine = total_price - penalty);
      printf("==================================================================\n");
 
 }
