@@ -6,7 +6,7 @@ float total_price;
 float penalty;
 float discount;
 float totalWFine;
-float withElectricity;
+float electricityPrice;
 int month;
 int day;
 int roomType;
@@ -30,37 +30,41 @@ void title() {
     getchar();
     };
 
+//jea
 electricityCondition() {
     printf("|  1. Include Listrik                   |\n");
     printf("|  2. Tidak Include Listrik             |\n");
     printf("-----------------------------------------\n");
     printf("   Masukkan Pilihan:   ");
-    scanf(" %c", &electricity);  // Use & to get the address of the variable
+    scanf(" %c", &electricity);
 
     switch (electricity) {
         case '1':
-            withElectricity = rental_price + 200000;
+            electricityPrice = 200000;
             break;
 
         case '2':
-            withElectricity = rental_price;
+            electricityPrice = 0;
             break;
     }
     calculatePrice();
+
+    return 0;
 }
 
 //bayu
  calculatePrice() {
 
-    printf("  Masukkan Jumlah Bulan Yang Akan Dibayar : ");
+    printf("   Masukkan Jumlah Bulan Yang Akan Dibayar : ");
     scanf("%d", &month);
 
     if (month <= 12){
-    total_price = month * withElectricity;
+    total_price = month * rental_price;
     } else {
-    discount = 0.01 * month * withElectricity;
-    total_price = (month * withElectricity) - discount;
+    discount = 0.01 * month * rental_price;
+    total_price = (month * rental_price) - discount;
     }
+    return 0;
  }   
 
 int main (){
@@ -98,6 +102,7 @@ int main (){
 
     }
 
+    system ("cls");
      printf("\n");
      printf("==================================================================\n");
      printf("                     TOTAL PEMBAYARAN KOS                         \n");
@@ -106,8 +111,11 @@ int main (){
      printf("   Tanggal                : %d \n", day);
      printf("   Jumlah Bulan           : %d \n", month);
      printf("   Harga Kamar Perbulan   : Rp.%2.lf  \n", total_price);
+     printf("   Biaya Listrik Tambahan : Rp.%2.lf  \n", electricityPrice);
      printf("==================================================================\n");
-     printf("   Total Biaya            : Rp.%2.lf   \n", totalWFine = total_price);
+     printf("   Total Biaya            : Rp.%2.lf   \n", total_price + electricityPrice);
      printf("==================================================================\n");
+
+    return 0;
 
 }
