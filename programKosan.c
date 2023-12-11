@@ -32,11 +32,9 @@ void title() {
 
     if (month < 12){
     total_price = month * rental_price;
-    printf("  Harga Yang Dibayarkan Untuk %d Bulan Adalah %.2f", month, total_price);
     } else {
     discount = 0.01 * month * rental_price;
     total_price = (month * rental_price) - discount;
-    printf("  Harga Yang Dibayarkan Untuk %d Bulan Adalah %.2f", month, total_price);
     }
  }    
  
@@ -91,5 +89,21 @@ int main (){
     totalWFine = total_price - penalty;
 
     printf("\nHarga %lf", totalWFine);
+
+    // printf("\n");
+    // printf("==================================================================\n");
+    // printf("                     TOTAL PEMBAYARAN KOS                         \n");
+    // printf("==================================================================\n");
+    // printf("   Tipe                   : %c \n", pelanggan);
+    // printf("   GOLONGAN               : %c \n", RT);
+    // printf("   TEGANGAN               : %c \n", tegangan);
+    // printf("   TANGGAL                : %s \n", tanggal_bayar);
+    // printf("   Biaya Pemeliharaan     : Rp.%d  \n", bpm);
+    // printf("   Biaya Pemakaian        : Rp.%d  \n", biaya);
+    // printf("   Biaya Administrasi     : Rp.%d  \n", admin);
+    // printf("   Biaya Denda            : Rp.%d  \n", denda);
+    // printf("==================================================================\n");
+    // printf("   Total Biaya            : Rp.%d   \n", bpm + biaya + admin + denda);
+    // printf("==================================================================\n");
 
 }
