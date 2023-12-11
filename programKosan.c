@@ -10,6 +10,7 @@ int month;
 int day;
 char type;
 
+//karin
 void title() {
     printf("=========================================\n");
     printf("|                                        |\n");
@@ -26,6 +27,7 @@ void title() {
     getchar();
     };
 
+//bayu
  calculatePrice() {
     printf("  Masukkan Jumlah Bulan Yang Akan Dibayar : ");
     scanf("%d", &month);
@@ -38,33 +40,36 @@ void title() {
     }
  }    
  
+ //jea
 finePrice(){
-    printf("  \nMasukkan Tanggal Bayar : "); 
+    printf("  Masukkan Tanggal Bayar : "); 
     scanf("%d", &day);
 
     if (day >= 15){
         penalty = 0.15 * total_price;
         printf(" Denda: %lf", penalty);
     } else {
+        penalty = 0;
         printf(" Tidak Terdapat Denda");
     }
 }
 
 int main (){
     title();
-
+//jea
     printf("=========================================\n");
     printf("|              SERNIA KOST              |\n");
     printf("=========================================\n");
     printf("|  TIPE KAMAR                           |\n");
     printf("|  1. Standard                          |\n");
-    printf("|  2. Deluxe                            |\n");
-    printf("|  3. Grand Deluxe                      |\n");
+    printf("|  2. Deluxe                            |\n"); //include aer
+    printf("|  3. Grand Deluxe                      |\n"); //include aer sama listrik
     printf("-----------------------------------------\n");
     printf("  Pilihan Tipe Kamar:   ");
     type = getchar();
     fflush(stdin);
-    
+
+//bayu
     switch (type)
     {
      case '1':
@@ -86,24 +91,17 @@ int main (){
 
     finePrice();
 
-    totalWFine = total_price - penalty;
-
-    printf("\nHarga %lf", totalWFine);
-
-    // printf("\n");
-    // printf("==================================================================\n");
-    // printf("                     TOTAL PEMBAYARAN KOS                         \n");
-    // printf("==================================================================\n");
-    // printf("   Tipe                   : %c \n", pelanggan);
-    // printf("   GOLONGAN               : %c \n", RT);
-    // printf("   TEGANGAN               : %c \n", tegangan);
-    // printf("   TANGGAL                : %s \n", tanggal_bayar);
-    // printf("   Biaya Pemeliharaan     : Rp.%d  \n", bpm);
-    // printf("   Biaya Pemakaian        : Rp.%d  \n", biaya);
-    // printf("   Biaya Administrasi     : Rp.%d  \n", admin);
-    // printf("   Biaya Denda            : Rp.%d  \n", denda);
-    // printf("==================================================================\n");
-    // printf("   Total Biaya            : Rp.%d   \n", bpm + biaya + admin + denda);
-    // printf("==================================================================\n");
+    system("cls");
+     printf("\n");
+     printf("==================================================================\n");
+     printf("                     TOTAL PEMBAYARAN KOS                         \n");
+     printf("==================================================================\n");
+     printf("   Tipe                   : %d \n", type);
+     printf("   Tanggal                : %d \n", day);
+     printf("   Harga Kamar Perbulan   : Rp.%2.lf  \n", total_price);
+     printf("   Denda                  : Rp.%2.lf  \n", penalty);
+     printf("==================================================================\n");
+     printf("   Total Biaya            : Rp.%2.lf   \n", totalWFine = total_price - penalty);
+     printf("==================================================================\n");
 
 }
