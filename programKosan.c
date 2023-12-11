@@ -4,7 +4,10 @@
 float rental_price;
 float total_price;
 float penalty;
+float discount;
+float totalWFine;
 int month;
+int day;
 char type;
 
 void title() {
@@ -24,12 +27,30 @@ void title() {
     };
 
  calculatePrice() {
-    printf("Masukkan Jumlah Bulan Yang Akan Dibayar : ");
+    printf("  Masukkan Jumlah Bulan Yang Akan Dibayar : ");
     scanf("%d", &month);
 
+    if (month < 12){
     total_price = month * rental_price;
-    printf("Harga Yang Dibayarkan Untuk %d Bulan Adalah %.2f", month, total_price);
+    printf("  Harga Yang Dibayarkan Untuk %d Bulan Adalah %.2f", month, total_price);
+    } else {
+    discount = 0.01 * month * rental_price;
+    total_price = (month * rental_price) - discount;
+    printf("  Harga Yang Dibayarkan Untuk %d Bulan Adalah %.2f", month, total_price);
+    }
  }    
+ 
+finePrice(){
+    printf("  \nMasukkan Tanggal Bayar : "); 
+    scanf("%d", &day);
+
+    if (day >= 15){
+        penalty = 0.15 * total_price;
+        printf(" Denda: %lf", penalty);
+    } else {
+        printf(" Tidak Terdapat Denda");
+    }
+}
 
 int main (){
     title();
@@ -65,5 +86,10 @@ int main (){
 
     }
 
+    finePrice();
+
+    totalWFine = total_price - penalty;
+
+    printf("\nHarga %lf", totalWFine);
 
 }
