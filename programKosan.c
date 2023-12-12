@@ -38,17 +38,17 @@ int main (){
 
 //karin
 void title() {
-    printf("=========================================\n");
-    printf("|                                        |\n");
-    printf("|  SSSS  EEEE  RRRR   NN  N  III  AAA    |\n");
-    printf("| S      E     R   R  N N N   I  A   A   |\n");
-    printf("|  SSS   EEE   RRRR   N  NN   I  AAAAA   |\n");
-    printf("|     S  E     R  R   N   N   I  A   A   |\n");
-    printf("| SSSS   EEEE  R   R  N   N  III A   A   |\n");
-    printf("|                                        |\n");
-    printf("|              Sernia Kost               |\n");
-    printf("|  JL. Jimbaran Kiri, Kanan Dikit,Bali   |\n");
-    printf("=========================================\n");
+    printf("==============================================\n");
+    printf("|                                            |\n");
+    printf("|    SSSS  EEEE  RRRR   NN  N  III  AAA      |\n");
+    printf("|   S      E     R   R  N N N   I  A   A     |\n");
+    printf("|    SSS   EEE   RRRR   N  NN   I  AAAAA     |\n");
+    printf("|       S  E     R  R   N   N   I  A   A     |\n");
+    printf("|   SSSS   EEEE  R   R  N   N  III A   A     |\n");
+    printf("|                                            |\n");
+    printf("|                Sernia Kost                 |\n");
+    printf("|    JL. Jimbaran Kiri, Kanan Dikit,Bali     |\n");
+    printf("==============================================\n");
     system("pause");
     };
     
@@ -84,9 +84,10 @@ int calculatePrice() {
 
 //jea
 void electricityCondition() {
-    printf("|  1. Include Listrik                   |\n");
-    printf("|  2. Tidak Include Listrik             |\n");
-    printf("-----------------------------------------\n");
+    printf("|                                            |\n");
+    printf("|      1. Include Listrik                    |\n");
+    printf("|      2. Tidak Include Listrik              |\n");
+    printf("==============================================\n");
     printf("   Masukkan Pilihan:   ");
     scanf(" %c", &electricity);
 
@@ -104,14 +105,16 @@ void electricityCondition() {
 
 //karin
 void selectType() {
-    printf("=========================================\n");
-    printf("|              SERNIA KOST              |\n");
-    printf("=========================================\n");
-    printf("|  TIPE KAMAR                           |\n");
-    printf("|  1. Standard                          |\n");
-    printf("|  2. Deluxe                            |\n");
-    printf("|  3. Grand Deluxe                      |\n");
-    printf("-----------------------------------------\n");
+    printf("==============================================\n");
+    printf("|                SERNIA KOST                 |\n");
+    printf("==============================================\n");
+    printf("|                                            |\n");
+    printf("|  TIPE KAMAR                                |\n");
+    printf("|  1. Standard                               |\n");
+    printf("|  2. Deluxe                                 |\n");
+    printf("|  3. Grand Deluxe                           |\n");
+    printf("|                                            |\n");
+    printf("----------------------------------------------\n");
     printf("   Pilihan Tipe Kamar:   ");
     scanf(" %c", &type);
 
@@ -166,7 +169,6 @@ void struk() {
 
 //bayu
 void printToStrukFile() {
-
 
     time_t current_time = time(NULL);
 
