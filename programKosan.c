@@ -1,18 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
-float rental_price;
-float total_price;
-float penalty;
-float discount;
-float totalWFine;
-float electricityPrice;
-int month;
-int day;
-int roomType;
-char type;
-char electricity;
-char tanggal_bayar[80];
+float rental_price, electricityPrice, total_price, total_electric, penalty, discount;
+int month, roomType;
+char type, electricity;
+char payment_date[80];
 
 //karin
 void title() {
@@ -27,8 +21,7 @@ void title() {
     printf("|              Sernia Kost               |\n");
     printf("|  JL. Jimbaran Kiri, Kanan Dikit,Bali   |\n");
     printf("=========================================\n");
-    printf("            Enter To Continue             ");
-    getchar();
+    system("pause");
     };
 
 //bayu
@@ -40,11 +33,15 @@ int calculatePrice() {
     if (month > 12) {
         discount = 0.01 * month * rental_price;
         total_price = (month * rental_price) - discount;
+
+        discount = 0.01 * month * electricityPrice;
+        total_electric = (month * electricityPrice) - discount;
     }
 
     total_price = month * rental_price;
+    total_electric = month * electricityPrice;
 
-    return total_price;
+    return total_price, total_electric;
  }   
 
 //jea
@@ -67,7 +64,7 @@ void electricityCondition() {
     calculatePrice();
 }
 
-//bayu
+//karin
 void selectType() {
     printf("=========================================\n");
     printf("|              SERNIA KOST              |\n");
@@ -107,30 +104,61 @@ void getTime() {
     time(&rawtime);
     info = localtime(&rawtime);
 
-    strftime(tanggal_bayar, sizeof(tanggal_bayar), "%Y-%m-%d %H:%M:%S", info);
+    strftime(payment_date, sizeof(payment_date), "%Y-%m-%d %H:%M:%S", info);
 }
 
-//karin
+//bayu
 void struk() {
-    printf("\n");
+     getTime(); 
+     printf("\n");
      printf("==================================================================\n");
      printf("                     TOTAL PEMBAYARAN KOS                         \n");
      printf("==================================================================\n");
      printf("   Tipe                   : %c \n", type);
-     printf("   Tanggal                : %s \n", tanggal_bayar);
+     printf("   Tanggal                : %s \n", payment_date);
      printf("   Jumlah Bulan           : %d \n", month);
      printf("   Harga Kamar Perbulan   : Rp.%2.f  \n", total_price);
-     printf("   Biaya Listrik Tambahan : Rp.%2.f  \n", electricityPrice);
+     printf("   Biaya Kouta Listrik ]  : Rp.%2.f  \n", total_electric);
      printf("==================================================================\n");
-     printf("   Total Biaya            : Rp.%2.f   \n", total_price + electricityPrice);
+     printf("   Total Biaya            : Rp.%2.f   \n", total_price + total_electric);
      printf("==================================================================\n");
+
+
+
+    char filename[80];
+
+    snprintf(filename, sizeof(filename), "%s.txt", payment_date);
+
+    FILE *file;
+    file = fopen(filename, "w+");
+
+    if (file == NULL) {
+        printf("Gagal membuat file struk pembayaran.\n");
+        return;
+    }
+
+    // Menuliskan detail pembayaran ke dalam file
+    fprintf(file, "==================================================================\n");
+    fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
+    fprintf(file, "==================================================================\n");
+    fprintf(file, "   Tipe                   : %c \n", type);
+    fprintf(file, "   Tanggal                : %s \n", payment_date);
+    fprintf(file, "   Jumlah Bulan           : %d \n", month);
+    fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", total_price);
+    fprintf(file, "   Biaya Kouta Listrik    : Rp.%.2f  \n", total_electric);
+    fprintf(file, "==================================================================\n");
+    fprintf(file, "   Total Biaya            : Rp.%.2f   \n", total_price + total_electric);
+    fprintf(file, "==================================================================\n");
+
+    fclose(file);
+    printf("Struk pembayaran telah dibuat dalam file '%s'.\n", filename);
 }
+
 
 //jea,bayu,karin
 int main (){
     title();
     selectType();
-    getTime();
     struk();
     return 0;
 
