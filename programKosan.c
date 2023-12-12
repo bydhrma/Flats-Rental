@@ -3,6 +3,14 @@
 #include <time.h>
 #include <string.h>
 
+struct tenantInfo{
+    char name[80];
+    char idNumber[20];
+    char phoneNumber[20];
+};
+
+struct tenantInfo infoPenyewa;
+
 float rental_price, electricityPrice, total_price, total_electric, penalty, discount;
 int month, roomType;
 char type, electricity;
@@ -10,6 +18,7 @@ char payment_date[80];
 char filename[80];
 
 void title();
+void tenant();
 int calculatePrice();
 void selectType();
 void getTime();
@@ -19,6 +28,7 @@ void printToStrukFile();
 //jea,bayu,karin
 int main (){
     title();
+    tenant();
     selectType();
     struk();
     printToStrukFile();
@@ -41,6 +51,16 @@ void title() {
     printf("=========================================\n");
     system("pause");
     };
+    
+    //jea
+    void tenant(){
+        printf("Nama Penyewa: ");
+        scanf("%s", infoPenyewa.name);
+        printf("NIK Penyewa: ");
+        scanf("%s", infoPenyewa.idNumber);
+        printf("No Hp Penyewa: ");
+        scanf("%s", infoPenyewa.phoneNumber);
+    }
 
 //bayu
 int calculatePrice() {
@@ -93,8 +113,7 @@ void selectType() {
     printf("|  3. Grand Deluxe                      |\n");
     printf("-----------------------------------------\n");
     printf("   Pilihan Tipe Kamar:   ");
-    type = getchar();
-    fflush(stdin);
+    scanf(" %c", &type);
 
     switch (type)
     {
@@ -132,6 +151,9 @@ void struk() {
      printf("==================================================================\n");
      printf("                     TOTAL PEMBAYARAN KOS                         \n");
      printf("==================================================================\n");
+     printf("   Nama Penyewa           : %s \n", infoPenyewa.name);
+     printf("   NIK Penyewa            : %s \n", infoPenyewa.idNumber);
+     printf("   No Hp Penyewa          : %s \n", infoPenyewa.phoneNumber);
      printf("   Tipe                   : %c \n", type);
      printf("   Tanggal                : %s \n", payment_date);
      printf("   Jumlah Bulan           : %d \n", month);
@@ -144,6 +166,8 @@ void struk() {
 
 //bayu
 void printToStrukFile() {
+
+
     time_t current_time = time(NULL);
 
     getTime();
@@ -155,6 +179,9 @@ void printToStrukFile() {
         fprintf(file, "==================================================================\n");
         fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
         fprintf(file, "==================================================================\n");
+        fprintf(file, "   Nama Penyewa           : %s \n", infoPenyewa.name);
+        fprintf(file, "   NIK Penyewa            : %d \n", infoPenyewa.idNumber);
+        fprintf(file, "   No Hp Penyewa          : %d \n", infoPenyewa.phoneNumber);
         fprintf(file, "   Tipe                   : %c \n", type);
         fprintf(file, "   Tanggal                : %s \n", payment_date);
         fprintf(file, "   Jumlah Bulan           : %d \n", month);
