@@ -9,6 +9,23 @@ char type, electricity;
 char payment_date[80];
 char filename[80];
 
+void title();
+int calculatePrice();
+void selectType();
+void getTime();
+void struk();
+void printToStrukFile();
+
+//jea,bayu,karin
+int main (){
+    title();
+    selectType();
+    struk();
+    printToStrukFile();
+    return 0;
+
+}
+
 //karin
 void title() {
     printf("=========================================\n");
@@ -125,13 +142,12 @@ void struk() {
      printf("==================================================================\n");
 }
 
-// Fungsi untuk mencetak struk ke dalam file
+//bayu
 void printToStrukFile() {
     time_t current_time = time(NULL);
 
     getTime();
 
-    // Format nama file dengan menggunakan waktu saat ini
     strftime(filename, sizeof(filename), "struk_pembayaran_%Y%m%d_%H%M%S.txt", localtime(&current_time));
 
     FILE *file = fopen(filename, "w");
@@ -156,14 +172,3 @@ void printToStrukFile() {
 }
 
 
-
-
-//jea,bayu,karin
-int main (){
-    title();
-    selectType();
-    struk();
-    printToStrukFile();
-    return 0;
-
-}
