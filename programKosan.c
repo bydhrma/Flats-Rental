@@ -16,6 +16,7 @@ int month, roomType;
 char type, electricity;
 char payment_date[80];
 char filename[80];
+char repeat;
 
 void title();
 void tenant();
@@ -24,16 +25,24 @@ void selectType();
 void getTime();
 void struk();
 void printToStrukFile();
+// void ulangMenu();
 
 //jea,bayu,karin
 int main (){
+    do{
     title();
     tenant();
     selectType();
     struk();
     printToStrukFile();
-    return 0;
 
+
+        printf("Apakah anda ingin mengulang?\n");
+        printf("YA (Y)\n");
+        printf("TIDAK (N)\n");
+        scanf(" %c", &repeat);
+        } while (repeat == 'y' || repeat == 'Y');
+    return 0;
 }
 
 //karin
@@ -52,15 +61,15 @@ void title() {
     system("pause");
     };
     
-    //jea
-    void tenant(){
-        printf("Nama Penyewa: ");
-        scanf("%s", infoPenyewa.name);
-        printf("NIK Penyewa: ");
-        scanf("%s", infoPenyewa.idNumber);
-        printf("No Hp Penyewa: ");
-        scanf("%s", infoPenyewa.phoneNumber);
-    }
+//jea
+void tenant(){
+    printf("Nama Penyewa: ");
+    scanf("%s", infoPenyewa.name);
+    printf("NIK Penyewa: ");
+    scanf("%s", infoPenyewa.idNumber);
+    printf("No.Hp Penyewa: ");
+    scanf("%s", infoPenyewa.phoneNumber);
+ }
 
 //bayu
 int calculatePrice() {
@@ -85,8 +94,8 @@ int calculatePrice() {
 //jea
 void electricityCondition() {
     printf("|                                            |\n");
-    printf("|      1. Include Listrik                    |\n");
-    printf("|      2. Tidak Include Listrik              |\n");
+    printf("|  1. Include Listrik                        |\n");
+    printf("|  2. Tidak Include Listrik                  |\n");
     printf("==============================================\n");
     printf("   Masukkan Pilihan:   ");
     scanf(" %c", &electricity);
@@ -143,7 +152,7 @@ void getTime() {
     struct tm *info;
     time(&rawtime);
     info = localtime(&rawtime);
-
+    
     strftime(payment_date, sizeof(payment_date), "%Y-%m-%d %H:%M:%S", info);
 }
 
@@ -169,9 +178,7 @@ void struk() {
 
 //bayu
 void printToStrukFile() {
-
     time_t current_time = time(NULL);
-
     getTime();
 
     strftime(filename, sizeof(filename), "struk_pembayaran_%Y%m%d_%H%M%S.txt", localtime(&current_time));
@@ -200,4 +207,29 @@ void printToStrukFile() {
     }
 }
 
+// void ulangMenu()
+// {
+//    char chooseMenu;
+//    fflush(stdin);
 
+//    printf("\nApakah anda ingin menambahkan data lain?\n");
+//    printf("[Y] [N]");
+//    printf("Pilihan:");
+//    scanf("%c", &chooseMenu);
+
+//    if (chooseMenu == 'Y' || chooseMenu == 'y')
+//    {
+//       system("cls");
+//       tenant();
+//    }
+//    else if (chooseMenu == 'N' || chooseMenu == 'n')
+//    {
+//       system("cls");
+//       exit(0);
+//    }
+//    else
+//    {
+//       printf("Input tidak valid, coba lagi");
+//       ulangMenu();
+//    }
+// }

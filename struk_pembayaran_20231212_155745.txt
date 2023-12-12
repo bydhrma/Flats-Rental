@@ -1,14 +1,14 @@
 ==================================================================
                      TOTAL PEMBAYARAN KOS                         
 ==================================================================
-   Nama Penyewa           : jawa 
+   Nama Penyewa           : Bayu 
    NIK Penyewa            : 4227504 
    No Hp Penyewa          : 4227524 
-   Tipe                   : 1 
-   Tanggal                : 2023-12-12 13:31:47 
-   Jumlah Bulan           : 2 
-   Harga Kamar Perbulan   : Rp.1600000.00  
-   Biaya Kouta Listrik    : Rp.400000.00  
+   Tipe                   : " 
+   Tanggal                : 2023-12-12 15:57:45 
+   Jumlah Bulan           : 0 
+   Harga Kamar Perbulan   : Rp.0.00  
+   Biaya Kouta Listrik    : Rp.0.00  
 ==================================================================
-   Total Biaya            : Rp.2000000.00   
+   Total Biaya            : Rp.0.00   
 ==================================================================
