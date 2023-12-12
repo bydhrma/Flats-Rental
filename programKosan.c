@@ -7,6 +7,7 @@ float rental_price, electricityPrice, total_price, total_electric, penalty, disc
 int month, roomType;
 char type, electricity;
 char payment_date[80];
+char filename[80];
 
 //karin
 void title() {
@@ -118,41 +119,43 @@ void struk() {
      printf("   Tanggal                : %s \n", payment_date);
      printf("   Jumlah Bulan           : %d \n", month);
      printf("   Harga Kamar Perbulan   : Rp.%2.f  \n", total_price);
-     printf("   Biaya Kouta Listrik ]  : Rp.%2.f  \n", total_electric);
+     printf("   Biaya Kouta Listrik    : Rp.%2.f  \n", total_electric);
      printf("==================================================================\n");
      printf("   Total Biaya            : Rp.%2.f   \n", total_price + total_electric);
      printf("==================================================================\n");
-
-
-
-    char filename[80];
-
-    snprintf(filename, sizeof(filename), "%s.txt", payment_date);
-
-    FILE *file;
-    file = fopen(filename, "w+");
-
-    if (file == NULL) {
-        printf("Gagal membuat file struk pembayaran.\n");
-        return;
-    }
-
-    // Menuliskan detail pembayaran ke dalam file
-    fprintf(file, "==================================================================\n");
-    fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
-    fprintf(file, "==================================================================\n");
-    fprintf(file, "   Tipe                   : %c \n", type);
-    fprintf(file, "   Tanggal                : %s \n", payment_date);
-    fprintf(file, "   Jumlah Bulan           : %d \n", month);
-    fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", total_price);
-    fprintf(file, "   Biaya Kouta Listrik    : Rp.%.2f  \n", total_electric);
-    fprintf(file, "==================================================================\n");
-    fprintf(file, "   Total Biaya            : Rp.%.2f   \n", total_price + total_electric);
-    fprintf(file, "==================================================================\n");
-
-    fclose(file);
-    printf("Struk pembayaran telah dibuat dalam file '%s'.\n", filename);
 }
+
+// Fungsi untuk mencetak struk ke dalam file
+void printToStrukFile() {
+    time_t current_time = time(NULL);
+
+    getTime();
+
+    // Format nama file dengan menggunakan waktu saat ini
+    strftime(filename, sizeof(filename), "struk_pembayaran_%Y%m%d_%H%M%S.txt", localtime(&current_time));
+
+    FILE *file = fopen(filename, "w");
+    if (file != NULL) {
+        fprintf(file, "==================================================================\n");
+        fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
+        fprintf(file, "==================================================================\n");
+        fprintf(file, "   Tipe                   : %c \n", type);
+        fprintf(file, "   Tanggal                : %s \n", payment_date);
+        fprintf(file, "   Jumlah Bulan           : %d \n", month);
+        fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", total_price);
+        fprintf(file, "   Biaya Kouta Listrik    : Rp.%.2f  \n", total_electric);
+        fprintf(file, "==================================================================\n");
+        fprintf(file, "   Total Biaya            : Rp.%.2f   \n", total_price + total_electric);
+        fprintf(file, "==================================================================\n");
+
+        fclose(file);
+        printf("Struk pembayaran telah disimpan dalam file: %s\n", filename);
+    } else {
+        printf("Gagal menyimpan struk pembayaran.\n");
+    }
+}
+
+
 
 
 //jea,bayu,karin
@@ -160,6 +163,7 @@ int main (){
     title();
     selectType();
     struk();
+    printToStrukFile();
     return 0;
 
 }
