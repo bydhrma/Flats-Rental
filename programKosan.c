@@ -30,7 +30,7 @@ void printToStrukFile();
 int main (){
     do{
         system("cls");
-        
+
     title();
     tenant();
     selectType();
@@ -39,7 +39,7 @@ int main (){
 
 
         printf("Apakah anda ingin mengulang?\n");
-        printf("YA (Y) ");
+        printf("YA (Y) \n");
         printf("TIDAK (N)\n");
         scanf(" %c", &repeat);
         } while (repeat == 'y' || repeat == 'Y');
@@ -217,6 +217,7 @@ void getTime() {
 
 //bayu
 void struk() {
+    system("cls");
      getTime(); 
      printf("\n");
      printf("==================================================================\n");
