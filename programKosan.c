@@ -3,6 +3,14 @@
 #include <time.h>
 #include <string.h>
 
+#define MAX_KAMAR 50
+
+typedef struct {
+    int nomerKamar;
+    int terisi;
+    char namaPenyewa[50];
+} Kamar;
+
 struct tenantInfo{
     char name[80];
     char idNumber[20];
@@ -11,6 +19,7 @@ struct tenantInfo{
 
 struct tenantInfo infoPenyewa;
 
+int isNameEntered = 0;
 float rental_price, electricityPrice, waterPrice, total_price, total_electric, total_water, penalty, discount;
 int month, roomType;
 char type, electricity, water;
@@ -25,6 +34,12 @@ void selectType();
 void getTime();
 void struk();
 void printToStrukFile();
+void bacaDataKamar();
+void tulisDataKamar();
+void tampilkanStatusKamar();
+void isiKamar();
+void tambahKamar();
+void roomInfo();
 
 //jea,bayu,karin
 int main (){
@@ -32,8 +47,9 @@ int main (){
         system("cls");
 
     title();
-    tenant();
     selectType();
+    roomInfo();
+    tenant();
     struk();
     printToStrukFile();
 
@@ -61,17 +77,155 @@ void title() {
     printf("==============================================\n");
     system("pause");
     };
+
+void bacaDataKamar(Kamar dataKamar[], int *jumlahKamar) {
+    FILE *file = fopen("data_kamar.txt", "r");
+    if (file == NULL) {
+        printf("File tidak ditemukan, membuat file baru...\n");
+        file = fopen("data_kamar.txt", "w");
+        fclose(file);
+        return;
+    }
+
+    while (fscanf(file, "%d %d %[^\n]", &dataKamar[*jumlahKamar].nomerKamar, &dataKamar[*jumlahKamar].terisi, dataKamar[*jumlahKamar].namaPenyewa) != EOF) {
+        (*jumlahKamar)++;
+    }
+
+    fclose(file);
+}
+
+void tulisDataKamar(Kamar dataKamar[], int jumlahKamar) {
+    FILE *file = fopen("data_kamar.txt", "w");
+    if (file == NULL) {
+        printf("File tidak dapat dibuka.\n");
+        return;
+    }
+
+    for (int i = 0; i < jumlahKamar; i++) {
+        if (dataKamar[i].terisi == 1) {
+            fprintf(file, "%d %d %s\n", dataKamar[i].nomerKamar, dataKamar[i].terisi, dataKamar[i].namaPenyewa);
+        } else {
+            fprintf(file, "%d %d\n", dataKamar[i].nomerKamar, dataKamar[i].terisi);
+        }
+    }
+
+    fclose(file);
+}
+
+void tampilkanStatusKamar(Kamar dataKamar[], int jumlahKamar) {
+    printf("Nomer Kamar\tStatus\n");
+    for (int i = 0; i < jumlahKamar; i++) {
+        printf("%d\t\t%s\n", dataKamar[i].nomerKamar, (dataKamar[i].terisi == 1) ? "Terisi" : "Tersedia");
+    }
+}
+
+void isiKamar(Kamar dataKamar[], int jumlahKamar, int nomorKamar) {
+    if (!isNameEntered) {
+        // If the name hasn't been entered, allow the user to input it
+        printf("Masukkan nama penyewa untuk kamar nomor %d: ", nomorKamar);
+        scanf(" %[^\n]", infoPenyewa.name);
+        isNameEntered = 1; // Set the flag to indicate that the name has been entered
+    }
+
+    char namaPenyewa[50];
+    for (int i = 0; i < jumlahKamar; i++) {
+        if (dataKamar[i].nomerKamar == nomorKamar) {
+            if (dataKamar[i].terisi == 0) {
+                dataKamar[i].terisi = 1;
+                strcpy(dataKamar[i].namaPenyewa, infoPenyewa.name);
+                printf("Kamar nomor %d berhasil diisi oleh %s.\n", nomorKamar, infoPenyewa.name);
+                tulisDataKamar(dataKamar, jumlahKamar);
+                return;
+            } else {
+                printf("Kamar nomor %d sudah terisi.\n", nomorKamar);
+                return;
+            }
+        }
+    }
+    printf("Kamar nomor %d tidak ditemukan.\n", nomorKamar);
+}
+
+void tambahKamar(Kamar dataKamar[], int *jumlahKamar) {
+    if (*jumlahKamar >= MAX_KAMAR) {
+        printf("Jumlah kamar maksimal telah tercapai.\n");
+        return;
+    }
+
+    int nomorKamar;
+    printf("Masukkan nomor kamar yang ingin ditambahkan: ");
+    scanf("%d", &nomorKamar);
+
+    for (int i = 0; i < *jumlahKamar; i++) {
+        if (dataKamar[i].nomerKamar == nomorKamar) {
+            printf("Kamar nomor %d sudah ada dalam sistem.\n", nomorKamar);
+            return;
+        }
+    }
+
+    dataKamar[*jumlahKamar].nomerKamar = nomorKamar;
+    dataKamar[*jumlahKamar].terisi = 0;
+    (*jumlahKamar)++;
+    printf("Kamar nomor %d berhasil ditambahkan.\n", nomorKamar);
+    tulisDataKamar(dataKamar, *jumlahKamar);
+}
+
+void roomInfo() {
+    Kamar dataKamar[MAX_KAMAR];
+    int jumlahKamar = 0;
+    char goBack;
+
+    bacaDataKamar(dataKamar, &jumlahKamar);
+
+    int pilihanMenu;
+    int nomorKamar;
+
+    do {
+        printf("\nPilih Menu:\n");
+        printf("1. Tampilkan Status Kamar\n");
+        printf("2. Isi Kamar\n");
+        printf("3. Tambah Kamar\n");
+        printf("0. Keluar\n");
+        printf("Masukkan pilihan: ");
+        scanf("%d", &pilihanMenu);
+
+        switch (pilihanMenu) {
+            case 1:
+                tampilkanStatusKamar(dataKamar, jumlahKamar);
+                break;
+            case 2:
+                printf("Masukkan nomor kamar yang ingin diisi: ");
+                scanf("%d", &nomorKamar);
+                isiKamar(dataKamar, jumlahKamar, nomorKamar);
+                break;
+            case 3:
+                tambahKamar(dataKamar, &jumlahKamar);
+                break;
+            case 0:
+                printf("Keluar dari program.\n");
+                break;
+            default:
+                printf("Pilihan tidak valid.\n");
+        }
+    if (pilihanMenu == 0) {
+            break;
+        }
+    
+        printf("Kembali ke Menu?\n");
+        printf("YA (Y) \n");
+        printf("TIDAK (N)\n");
+        scanf(" %c", &goBack);
+    } while (goBack == 'y' || goBack == 'Y');
+    system ("cls");
+}
     
 //jea
-void tenant(){
-    system("cls");
-    printf("Nama Penyewa: ");
-    fgets(infoPenyewa.name, 80, stdin);
+void tenant() {
     printf("NIK Penyewa: ");
     scanf("%s", infoPenyewa.idNumber);
     printf("No.Hp Penyewa: ");
     scanf("%s", infoPenyewa.phoneNumber);
- }
+}
+
 
 //bayu
 int calculatePrice() {
@@ -223,7 +377,7 @@ void struk() {
      printf("==================================================================\n");
      printf("                     TOTAL PEMBAYARAN KOS                         \n");
      printf("==================================================================\n");
-     printf("   Nama Penyewa           : %s", infoPenyewa.name);
+     printf("   Nama Penyewa           : %s \n", infoPenyewa.name);
      printf("   NIK Penyewa            : %s \n", infoPenyewa.idNumber);
      printf("   No Hp Penyewa          : %s \n", infoPenyewa.phoneNumber);
      printf("   Tipe                   : %c \n", type);
