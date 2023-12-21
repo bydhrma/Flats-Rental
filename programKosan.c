@@ -29,6 +29,8 @@ void printToStrukFile();
 //jea,bayu,karin
 int main (){
     do{
+        system("cls");
+        
     title();
     tenant();
     selectType();
