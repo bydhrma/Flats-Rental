@@ -11,9 +11,9 @@ struct tenantInfo{
 
 struct tenantInfo infoPenyewa;
 
-float rental_price, electricityPrice, total_price, total_electric, penalty, discount;
+float rental_price, electricityPrice, waterPrice, total_price, total_electric, total_water, penalty, discount;
 int month, roomType;
-char type, electricity;
+char type, electricity, water;
 char payment_date[80];
 char filename[80];
 char repeat;
@@ -25,7 +25,6 @@ void selectType();
 void getTime();
 void struk();
 void printToStrukFile();
-// void ulangMenu();
 
 //jea,bayu,karin
 int main (){
@@ -64,7 +63,7 @@ void title() {
 //jea
 void tenant(){
     printf("Nama Penyewa: ");
-    scanf("%s", infoPenyewa.name);
+    fgets(infoPenyewa.name, 80, stdin);
     printf("NIK Penyewa: ");
     scanf("%s", infoPenyewa.idNumber);
     printf("No.Hp Penyewa: ");
@@ -83,6 +82,9 @@ int calculatePrice() {
 
         discount = 0.01 * month * electricityPrice;
         total_electric = (month * electricityPrice) - discount;
+
+        discount = 0.01 * month * waterPrice;
+        total_water = (month * waterPrice) - discount;
     }
 
     total_price = month * rental_price;
@@ -92,10 +94,10 @@ int calculatePrice() {
  }   
 
 //jea
-void electricityCondition() {
-    printf("|                                            |\n");
-    printf("|  1. Include Listrik                        |\n");
-    printf("|  2. Tidak Include Listrik                  |\n");
+void electricAndWaterCondition() {
+    printf("==============================================\n");
+    printf("|  1. Termasuk Listrik                       |\n");
+    printf("|  2. Tidak Termasuk Listrik                 |\n");
     printf("==============================================\n");
     printf("   Masukkan Pilihan:   ");
     scanf(" %c", &electricity);
@@ -108,7 +110,29 @@ void electricityCondition() {
         case '2':
             electricityPrice = 0;
             break;
+
+        default: 
+        printf("Input Tidak Valid. Jalankan Program Ulang");
     }
+
+    printf("==============================================\n");
+    printf("|  1. Termasuk Listrik                       |\n");
+    printf("|  2. Tidak Termasuk Listrik                 |\n");
+    printf("==============================================\n");
+    printf("   Masukkan Pilihan:   ");
+    scanf(" %c", &water);
+
+    switch (water)
+    {
+    case '1' :
+
+        break;
+    
+    default:
+        break;
+    }
+
+
     calculatePrice();
 }
 
@@ -131,17 +155,17 @@ void selectType() {
     {
      case '1':
      rental_price = 800000;
-     electricityCondition();
+     electricAndWaterCondition();
      break;
 
      case '2':
      rental_price = 1000000;
-     electricityCondition();
+     electricAndWaterCondition();
      break;
 
      case '3':
      rental_price = 1200000;
-     electricityCondition();
+     electricAndWaterCondition();
      break;
     }
 }
@@ -171,8 +195,9 @@ void struk() {
      printf("   Jumlah Bulan           : %d \n", month);
      printf("   Harga Kamar Perbulan   : Rp.%2.f  \n", total_price);
      printf("   Biaya Kouta Listrik    : Rp.%2.f  \n", total_electric);
+     printf("   Biaya Kouta Air        : Rp.%2.f  \n", total_water);
      printf("==================================================================\n");
-     printf("   Total Biaya            : Rp.%2.f   \n", total_price + total_electric);
+     printf("   Total Biaya            : Rp.%2.f   \n", total_price + total_electric + total_water);
      printf("==================================================================\n");
 }
 
@@ -197,7 +222,7 @@ void printToStrukFile() {
         fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", total_price);
         fprintf(file, "   Biaya Kouta Listrik    : Rp.%.2f  \n", total_electric);
         fprintf(file, "==================================================================\n");
-        fprintf(file, "   Total Biaya            : Rp.%.2f   \n", total_price + total_electric);
+        fprintf(file, "   Total Biaya            : Rp.%.2f   \n", total_price + total_electric + total_water);
         fprintf(file, "==================================================================\n");
 
         fclose(file);
@@ -206,30 +231,3 @@ void printToStrukFile() {
         printf("Gagal menyimpan struk pembayaran.\n");
     }
 }
-
-// void ulangMenu()
-// {
-//    char chooseMenu;
-//    fflush(stdin);
-
-//    printf("\nApakah anda ingin menambahkan data lain?\n");
-//    printf("[Y] [N]");
-//    printf("Pilihan:");
-//    scanf("%c", &chooseMenu);
-
-//    if (chooseMenu == 'Y' || chooseMenu == 'y')
-//    {
-//       system("cls");
-//       tenant();
-//    }
-//    else if (chooseMenu == 'N' || chooseMenu == 'n')
-//    {
-//       system("cls");
-//       exit(0);
-//    }
-//    else
-//    {
-//       printf("Input tidak valid, coba lagi");
-//       ulangMenu();
-//    }
-// }
