@@ -89,6 +89,7 @@ int calculatePrice() {
 
     total_price = month * rental_price;
     total_electric = month * electricityPrice;
+    total_water = month * waterPrice;
 
     return total_price, total_electric;
  }   
@@ -116,20 +117,22 @@ void electricAndWaterCondition() {
     }
 
     printf("==============================================\n");
-    printf("|  1. Termasuk Listrik                       |\n");
-    printf("|  2. Tidak Termasuk Listrik                 |\n");
+    printf("|  1. Termasuk Air PDAM                      |\n");
+    printf("|  2. Tidak Termasuk Air PDAM                |\n");
     printf("==============================================\n");
     printf("   Masukkan Pilihan:   ");
     scanf(" %c", &water);
 
-    switch (water)
-    {
+    switch (water){
     case '1' :
-
+        waterPrice = 100000;
         break;
     
-    default:
+    case '2':
+        waterPrice = 0;
         break;
+    default:
+        printf("Input Tidak Valid. Jalankan Program Ulang");
     }
 
 
@@ -187,15 +190,15 @@ void struk() {
      printf("==================================================================\n");
      printf("                     TOTAL PEMBAYARAN KOS                         \n");
      printf("==================================================================\n");
-     printf("   Nama Penyewa           : %s \n", infoPenyewa.name);
+     printf("   Nama Penyewa           : %s", infoPenyewa.name);
      printf("   NIK Penyewa            : %s \n", infoPenyewa.idNumber);
      printf("   No Hp Penyewa          : %s \n", infoPenyewa.phoneNumber);
      printf("   Tipe                   : %c \n", type);
      printf("   Tanggal                : %s \n", payment_date);
      printf("   Jumlah Bulan           : %d \n", month);
      printf("   Harga Kamar Perbulan   : Rp.%2.f  \n", total_price);
-     printf("   Biaya Kouta Listrik    : Rp.%2.f  \n", total_electric);
-     printf("   Biaya Kouta Air        : Rp.%2.f  \n", total_water);
+     printf("   Biaya Kuota Listrik    : Rp.%2.f  \n", total_electric);
+     printf("   Biaya Kuota Air        : Rp.%2.f  \n", total_water);
      printf("==================================================================\n");
      printf("   Total Biaya            : Rp.%2.f   \n", total_price + total_electric + total_water);
      printf("==================================================================\n");
@@ -219,10 +222,11 @@ void printToStrukFile() {
         fprintf(file, "   Tipe                   : %c \n", type);
         fprintf(file, "   Tanggal                : %s \n", payment_date);
         fprintf(file, "   Jumlah Bulan           : %d \n", month);
-        fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", total_price);
-        fprintf(file, "   Biaya Kouta Listrik    : Rp.%.2f  \n", total_electric);
+        fprintf(file, "   Harga Kamar Perbulan   : Rp.%2.f  \n", total_price);
+        fprintf(file, "   Biaya Kuota Listrik    : Rp.%2.f  \n", total_electric);
+        fprintf(file, "   Biaya Kuota Air        : Rp.%2.f  \n", total_water);
         fprintf(file, "==================================================================\n");
-        fprintf(file, "   Total Biaya            : Rp.%.2f   \n", total_price + total_electric + total_water);
+        fprintf(file, "   Total Biaya            : Rp.%2.f   \n", total_price + total_electric + total_water);
         fprintf(file, "==================================================================\n");
 
         fclose(file);
