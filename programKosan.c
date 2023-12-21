@@ -39,7 +39,7 @@ int main (){
 
 
         printf("Apakah anda ingin mengulang?\n");
-        printf("YA (Y)\n");
+        printf("YA (Y) ");
         printf("TIDAK (N)\n");
         scanf(" %c", &repeat);
         } while (repeat == 'y' || repeat == 'Y');
@@ -64,6 +64,7 @@ void title() {
     
 //jea
 void tenant(){
+    system("cls");
     printf("Nama Penyewa: ");
     fgets(infoPenyewa.name, 80, stdin);
     printf("NIK Penyewa: ");
@@ -159,16 +160,45 @@ void selectType() {
     switch (type)
     {
      case '1':
+    printf("==============================================\n");
+    printf("|                  Fasilitas                 |\n");
+    printf("==============================================\n");
+    printf("|                                            |\n");
+    printf("|    - Kamar Mandi Dalam                     |\n");
+    printf("|    - Dapur                                 |\n");
+    printf("----------------------------------------------\n");
      rental_price = 800000;
      electricAndWaterCondition();
      break;
 
      case '2':
+    printf("==============================================\n");
+    printf("|                  Fasilitas                 |\n");
+    printf("==============================================\n");
+    printf("|                                            |\n");
+    printf("|    - Kamar Mandi Dalam                     |\n");
+    printf("|    - Dapur                                 |\n");
+    printf("|    - Kasur                                 |\n");
+    printf("|    - Meja Belajar                          |\n");
+    printf("|    - Lemari                                |\n");
+    printf("----------------------------------------------\n");
      rental_price = 1000000;
      electricAndWaterCondition();
      break;
 
      case '3':
+    printf("==============================================\n");
+    printf("|                  Fasilitas                 |\n");
+    printf("==============================================\n");
+    printf("|                                            |\n");
+    printf("|    - Kamar Mandi Dalam                     |\n");
+    printf("|    - Dapur                                 |\n");
+    printf("|    - Kasur                                 |\n");
+    printf("|    - Meja Belajar                          |\n");
+    printf("|    - Lemari                                |\n");
+    printf("|    - Televisi                              |\n");
+    printf("|    - AC                                    |\n");
+    printf("----------------------------------------------\n");
      rental_price = 1200000;
      electricAndWaterCondition();
      break;
