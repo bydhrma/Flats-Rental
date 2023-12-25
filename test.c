@@ -45,7 +45,7 @@ void tampilkanInfoKos(struct Kos kos[], int jumlah, enum TipeKos tipe) {
     }
 }
 
-int main() {
+int infoKos() {
     FILE *fileKos = fopen("daftar_kos.txt", "r+");
     if (fileKos == NULL) {
         printf("File tidak dapat dibuka.\n");
@@ -134,4 +134,8 @@ int main() {
     fclose(fileKos);
 
     return 0;
+}
+
+void main (){
+    infoKos();
 }
