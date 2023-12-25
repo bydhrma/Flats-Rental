@@ -55,11 +55,12 @@ int main() {
     struct Kos daftarKos[MAX_KOS];
     int nomorKamar, harga, tersedia, tipe;
     for (int i = 0; i < MAX_KOS; ++i) {
-        int result = fscanf(fileKos, "%d %d %d %d", &nomorKamar, &harga, &tersedia, &tipe);
+    int result = fscanf(fileKos, "%d %d %d %d", &nomorKamar, &harga, &tersedia, &tipe);
         if (result != 4) {
             fprintf(stderr, "Error reading room data from the file. Expected 4 values, but got %d.\n", result);
             return 1;  // Exit with an error code
         }
+        printf("Read Room Data: %d %d %d %d\n", nomorKamar, harga, tersedia, tipe);
 
         daftarKos[i].nomorKamar = nomorKamar;
         daftarKos[i].harga = harga;
@@ -73,9 +74,8 @@ int main() {
                 fprintf(stderr, "Error reading tenant data from the file. Expected 3 values, but got %d.\n", result);
                 return 1;  // Exit with an error code
             }
-        } else {
-            // If the room is not occupied, consume the newline character
-            fscanf(fileKos, "\n");
+
+            printf("Tenant Data: %s %d %s\n", daftarKos[i].penyewa.nama, daftarKos[i].penyewa.umur, daftarKos[i].penyewa.no_identitas);
         }
     }
 
@@ -113,11 +113,7 @@ int main() {
                 fseek(fileKos, 0, SEEK_SET);
                 for (int i = 0; i < MAX_KOS; ++i) {
                     fprintf(fileKos, "%d %d %d %d\n", daftarKos[i].nomorKamar, daftarKos[i].harga, daftarKos[i].tersedia, daftarKos[i].tipe);
-                    if (daftarKos[i].tersedia == 1) {
-                        fprintf(fileKos, "%s %d %s\n", daftarKos[i].penyewa.nama, daftarKos[i].penyewa.umur, daftarKos[i].penyewa.no_identitas);
-                    } else {
-                        fprintf(fileKos, "\n");
-                    }
+                    fprintf(fileKos, "%s %d %s\n", daftarKos[i].penyewa.nama, daftarKos[i].penyewa.umur, daftarKos[i].penyewa.no_identitas);
                 }
 
                 printf("Penyewaan kamar berhasil.\n");
