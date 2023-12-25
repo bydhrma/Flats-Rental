@@ -1,0 +1,10 @@
+Kolom pertama adalah nomor kamar.
+Kolom kedua adalah harga kamar.
+Kolom ketiga adalah status ketersediaan kamar (0: Terisi, 1: Tersedia).
+Kolom keempat adalah tipe kamar (0: Standard, 1: Deluxe, 2: Grand Deluxe).
+
+1 800000 1 0
+2 800000 1 0
+3 1000000 0 1
+4 1000000 1 1
+5 1200000 0 2
