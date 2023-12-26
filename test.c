@@ -44,6 +44,16 @@ void tampilkanInfoKos(struct Kos kos[], int jumlah, enum TipeKos tipe) {
         }
     }
 }
+void tulisDataKeFile(struct Kos daftarKos[], FILE *fileKos) {
+    for (int i = 0; i < MAX_KOS; ++i) {
+        fprintf(fileKos, "%d %d %d %d\n", daftarKos[i].nomorKamar, daftarKos[i].harga, daftarKos[i].tersedia, daftarKos[i].tipe);
+        if (daftarKos[i].tersedia == 1) {
+            fprintf(fileKos, "%s %d %s\n", daftarKos[i].penyewa.nama, daftarKos[i].penyewa.umur, daftarKos[i].penyewa.no_identitas);
+        } else {
+            fprintf(fileKos, "\n");
+        }
+    }
+}
 
 int infoKos() {
     FILE *fileKos = fopen("daftar_kos.txt", "r+");
@@ -135,6 +145,8 @@ int infoKos() {
 
     return 0;
 }
+
+
 
 void main (){
     infoKos();
