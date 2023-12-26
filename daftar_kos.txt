@@ -1,2 +1,2 @@
 Nomor Kamar	Tipe	Harga	Status
-101	Standard	800000.00	Terisi
+505	standard	200.00	Kosong

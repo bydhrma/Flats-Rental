@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_KAMAR 50
 #define MAX_PENYEWA 50
@@ -24,6 +25,8 @@ struct Penyewa {
     int gunaAir;
     int gunaListrik;
 };
+
+char payment_date[80];
 
 // Fungsi untuk menyimpan data kamar kos ke file
 void simpanKamarKeFile(struct Kamar kamar[], int jumlahKamar) {
@@ -128,7 +131,7 @@ void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, 
     printf("Masukkan nomor telepon: ");
     scanf("%s", penyewa[*jumlahPenyewa].noTelepon);
     
-    int nomorKamar, lamaSewa, gunaAir, gunaListrik;
+    int nomorKamar, lamaSewa, gunaAir = 0, gunaListrik = 0;
     printf("Masukkan nomor kamar yang disewa: ");
     scanf("%d", &nomorKamar);
     printf("Masukkan lama sewa (bulan): ");
@@ -139,8 +142,6 @@ void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, 
     if (strcmp(jawaban, "ya") == 0) {
         printf("Masukkan pemakaian air (dalam m³): ");
         scanf("%d", &gunaAir);
-    } else {
-        gunaAir = 0;
     }
 
     printf("Apakah penyewa ingin menggunakan listrik? (ya/tidak): ");
@@ -148,8 +149,6 @@ void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, 
     if (strcmp(jawaban, "ya") == 0) {
         printf("Masukkan pemakaian listrik (dalam kWh): ");
         scanf("%d", &gunaListrik);
-    } else {
-        gunaListrik = 0;
     }
 
     int found = 0;
@@ -159,7 +158,7 @@ void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, 
             penyewa[*jumlahPenyewa].lamaSewa = lamaSewa;
             penyewa[*jumlahPenyewa].gunaAir = gunaAir;
             penyewa[*jumlahPenyewa].gunaListrik = gunaListrik;
-            penyewa[*jumlahPenyewa].totalPembayaran = (kamar[i].harga * lamaSewa) + (150000 * gunaAir) + (200000 * gunaListrik);
+            penyewa[*jumlahPenyewa].totalPembayaran = (kamar[i].harga * lamaSewa) + (100000 * gunaAir) + (200000 * gunaListrik * lamaSewa);
             kamar[i].isTerisi = 1;
             found = 1;
             break;
@@ -229,3 +228,69 @@ int main() {
 
     return 0;
 }
+
+void getTime() {
+    time_t rawtime;
+    struct tm *info;
+    time(&rawtime);
+    info = localtime(&rawtime);
+    
+    strftime(payment_date, sizeof(payment_date), "%Y-%m-%d %H:%M:%S", info);
+}
+
+//bayu
+void struk(struct Kamar kamar[], struct Penyewa penyewa[], int roomIndex) {
+    char tipe[20];
+    system("cls");
+     getTime(); 
+     printf("\n");
+     printf("==================================================================\n");
+     printf("                     TOTAL PEMBAYARAN KOS                         \n");
+     printf("==================================================================\n");
+     printf("   Nama Penyewa           : %s \n", penyewa[roomIndex].nama);
+     printf("   NIK Penyewa            : %s \n", penyewa[roomIndex].NIK);
+     printf("   No Telepon Penyewa     : %s \n", penyewa[roomIndex].noTelepon);
+     strcpy(tipe, kamar[roomIndex].tipe);
+     printf("   Tipe                   : %s \n", tipe);
+     printf("   Tanggal                : %s \n", payment_date);
+     printf("   Jumlah Bulan           : %d \n", penyewa[roomIndex].lamaSewa);
+     printf("   Harga Kamar Perbulan   : Rp.%2.f  \n", kamar[roomIndex].harga);
+     printf("   Biaya Kuota Listrik    : Rp.%2.f  \n", penyewa[roomIndex].gunaListrik);
+     printf("   Biaya Kuota Air        : Rp.%2.f  \n", penyewa[roomIndex].gunaAir);
+     printf("==================================================================\n");
+     printf("   Total Biaya            : Rp.%2.f  \n", penyewa[roomIndex].totalPembayaran);
+     printf("==================================================================\n");
+}
+
+//bayu
+/* void printToStrukFile() {
+    time_t current_time = time(NULL);
+    getTime();
+
+    strftime(filename, sizeof(filename), "struk_pembayaran_%Y%m%d_%H%M%S.txt", localtime(&current_time));
+
+    FILE *file = fopen(filename, "w");
+    if (file != NULL) {
+        fprintf(file, "==================================================================\n");
+        fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
+        fprintf(file, "==================================================================\n");
+        fprintf(file, "   Nama Penyewa           : %s \n", penyewa.nama);
+        fprintf(file, "   NIK Penyewa            : %s \n", penyewa.no_identitas);
+        fprintf(file, "   No Hp Penyewa          : %d \n", penyewa.umur);
+        fprintf(file, "   Tipe                   : %c \n", type);
+        fprintf(file, "   Tanggal                : %s \n", payment_date);
+        fprintf(file, "   Jumlah Bulan           : %d \n", jumlahBulan);
+        fprintf(file, "   Harga Kamar Perbulan   : Rp.%2.f  \n", total_price);
+        fprintf(file, "   Biaya Kuota Listrik    : Rp.%2.f  \n", total_electric);
+        fprintf(file, "   Biaya Kuota Air        : Rp.%2.f  \n", total_water);
+        fprintf(file, "==================================================================\n");
+        fprintf(file, "   Total Biaya            : Rp.%2.f   \n", total_price + total_electric + total_water);
+        fprintf(file, "==================================================================\n");
+
+        fclose(file);
+        printf("Struk pembayaran telah disimpan dalam file: %s\n", filename);
+    } else {
+        printf("Gagal menyimpan struk pembayaran.\n");
+    }
+}
+*/

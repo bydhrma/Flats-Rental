@@ -26,42 +26,28 @@ struct Kos {
 };
 
 struct Kos kos;
-enum TipeKos tipePilihan;
+struct Penyewa penyewa;
 
-float electricityPrice, waterPrice, total_price, total_electric, total_water, discount;
-int jumlahBulan;
+int isNameEntered = 0;
+float electricityPrice, waterPrice, total_price, total_electric, total_water, penalty, discount;
+int roomType, jumlahBulan;
 char type, electricity, water;
 char payment_date[80];
 char filename[80];
 char repeat;
 
+// Function prototypes
 void title();
-void selectType();
+void tampilkanInfoKos(struct Kos kos[], int jumlah, enum TipeKos tipe);
 int infoKos();
-int calculatePrice(struct Kos kos); // Mengubah deklarasi calculatePrice()
+int calculatePrice();
 void electricAndWaterCondition();
+void selectType();
 void getTime();
 void struk();
-void printToStrukFile();
-
-
+void printToStrukFile(struct Penyewa penyewa);
 //jea,bayu,karin
-void main() {
-  do {
-    title();
-    selectType();
-    infoKos();
-    calculatePrice(kos);
-    struk();
-    printToStrukFile();
 
-    printf("Apakah anda ingin mengulang?\n");
-    printf("YA (Y) \n");
-    printf("TIDAK (N)\n");
-    scanf(" %c", &repeat);
-  } while (repeat == 'y' || repeat == 'Y');
-  return 0;
-}
 
 //karin
 void title() {
@@ -80,7 +66,6 @@ void title() {
     };
 
 void tampilkanInfoKos(struct Kos kos[], int jumlah, enum TipeKos tipe) {
-    int adaKamarTersedia = 0;
     printf("Kos yang Tersedia (Tipe ");
     switch (tipe) {
         case STANDARD:
@@ -97,19 +82,13 @@ void tampilkanInfoKos(struct Kos kos[], int jumlah, enum TipeKos tipe) {
 
     for (int i = 0; i < jumlah; ++i) {
         if (kos[i].tipe == tipe) {
-            printf("%d\t\t%d\t%s\n", kos[i].nomorKamar, kos[i].harga, (kos[i].tersedia ? "Tersedia" : "Terisi"));
-            adaKamarTersedia = 1; // Ada kamar yang tersedia
+            printf("%d\t\t%.2f\t%s\n", kos[i].nomorKamar, kos[i].harga, (kos[i].tersedia ? "Tersedia" : "Terisi"));
         }
-    }
-
-    if (!adaKamarTersedia) {
-        printf("Tidak ada Kamar tersedia.\n");
-        exit(0);
     }
 }
 
 int infoKos() {
-     FILE *fileKos = fopen("daftar_kos.txt", "r");
+    FILE *fileKos = fopen("daftar_kos.txt", "r+");
     if (fileKos == NULL) {
         printf("File tidak dapat dibuka.\n");
         return 1;
@@ -117,12 +96,11 @@ int infoKos() {
 
     struct Kos daftarKos[MAX_KOS];
     int nomorKamar, harga, tersedia, tipe;
-
     for (int i = 0; i < MAX_KOS; ++i) {
         int result = fscanf(fileKos, "%d %d %d %d", &nomorKamar, &harga, &tersedia, &tipe);
         if (result != 4) {
             fprintf(stderr, "Error reading room data from the file. Expected 4 values, but got %d.\n", result);
-            return 1;  // Keluar dengan kode kesalahan
+            return 1;  // Exit with an error code
         }
 
         daftarKos[i].nomorKamar = nomorKamar;
@@ -130,29 +108,22 @@ int infoKos() {
         daftarKos[i].tersedia = tersedia;
         daftarKos[i].tipe = tipe;
 
-        // Jika kamar tersedia, baca data penyewa
+        // Check if tenant data is present before reading
         if (tersedia == 1) {
-            char nama[50];
-            int umur;
-            char no_identitas[20];
-            result = fscanf(fileKos, " %49s %d %19s", nama, &umur, no_identitas);
+            result = fscanf(fileKos, "%s %d %s", daftarKos[i].penyewa.nama, &daftarKos[i].penyewa.umur, daftarKos[i].penyewa.no_identitas);
             if (result != 3) {
                 fprintf(stderr, "Error reading tenant data from the file. Expected 3 values, but got %d.\n", result);
-                return 1;  // Keluar dengan kode kesalahan
+                return 1;  // Exit with an error code
             }
-            // Simpan data penyewa ke struktur
-            strcpy(daftarKos[i].penyewa.nama, nama);
-            daftarKos[i].penyewa.umur = umur;
-            strcpy(daftarKos[i].penyewa.no_identitas, no_identitas);
         } else {
-            fscanf(fileKos, "\n"); // Baca newline jika kamar tidak tersedia
+            // If the room is not occupied, consume the newline character
+            fscanf(fileKos, "\n");
         }
     }
 
-    fclose(fileKos);
-
     fseek(fileKos, 0, SEEK_SET);
 
+    enum TipeKos tipePilihan;
     printf("Pilih tipe kos (0: Standard, 1: Deluxe, 2: Grand Deluxe): ");
     scanf("%d", &tipePilihan);
 
@@ -208,7 +179,8 @@ int infoKos() {
 }
 
 //bayu
-int calculatePrice(struct Kos kos) {
+int calculatePrice() {
+
     if (jumlahBulan > 12) {
         discount = 0.01 * jumlahBulan * kos.harga;
         total_price = (jumlahBulan * kos.harga) - discount;
@@ -218,14 +190,14 @@ int calculatePrice(struct Kos kos) {
 
         discount = 0.01 * jumlahBulan * waterPrice;
         total_water = (jumlahBulan * waterPrice) - discount;
-    } else {
-        total_price = jumlahBulan * kos.harga;
-        total_electric = jumlahBulan * electricityPrice;
-        total_water = jumlahBulan * waterPrice;
     }
 
+    total_price = jumlahBulan * kos.harga;
+    total_electric = jumlahBulan * electricityPrice;
+    total_water = jumlahBulan * waterPrice;
+
     return total_price, total_electric;
-}
+ }   
 
 //jea
 void electricAndWaterCondition() {
@@ -347,9 +319,9 @@ void struk() {
      printf("==================================================================\n");
      printf("                     TOTAL PEMBAYARAN KOS                         \n");
      printf("==================================================================\n");
-     printf("   Nama Penyewa           : %s \n", kos.penyewa.nama);
-     printf("   NIK Penyewa            : %s \n", kos.penyewa.no_identitas);
-     printf("   Umur Penyewa           : %d \n", kos.penyewa.umur);
+     printf("   Nama Penyewa           : %s \n", penyewa.nama);
+     printf("   NIK Penyewa            : %s \n", penyewa.no_identitas);
+     printf("   Umur Penyewa           : %d \n", penyewa.umur);
      printf("   Tipe                   : %c \n", type);
      printf("   Tanggal                : %s \n", payment_date);
      printf("   Jumlah Bulan           : %d \n", jumlahBulan);
@@ -362,7 +334,7 @@ void struk() {
 }
 
 //bayu
-void printToStrukFile() {
+void printToStrukFile(struct Penyewa penyewa) {
     time_t current_time = time(NULL);
     getTime();
 
@@ -373,9 +345,9 @@ void printToStrukFile() {
         fprintf(file, "==================================================================\n");
         fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
         fprintf(file, "==================================================================\n");
-        fprintf(file, "   Nama Penyewa           : %s \n", kos.penyewa.nama);
-        fprintf(file, "   NIK Penyewa            : %s \n", kos.penyewa.no_identitas);
-        fprintf(file, "   No Hp Penyewa          : %d \n", kos.penyewa.umur);
+        fprintf(file, "   Nama Penyewa           : %s \n", penyewa.nama);
+        fprintf(file, "   NIK Penyewa            : %s \n", penyewa.no_identitas);
+        fprintf(file, "   No Hp Penyewa          : %d \n", penyewa.umur);
         fprintf(file, "   Tipe                   : %c \n", type);
         fprintf(file, "   Tanggal                : %s \n", payment_date);
         fprintf(file, "   Jumlah Bulan           : %d \n", jumlahBulan);
@@ -391,4 +363,24 @@ void printToStrukFile() {
     } else {
         printf("Gagal menyimpan struk pembayaran.\n");
     }
+}
+
+int main (){
+    do{
+        system("cls");
+
+    title();
+    selectType();
+    infoKos();
+    calculatePrice();
+    struk();
+    printToStrukFile(penyewa);
+
+
+        printf("Apakah anda ingin mengulang?\n");
+        printf("YA (Y) \n");
+        printf("TIDAK (N)\n");
+        scanf(" %c", &repeat);
+        } while (repeat == 'y' || repeat == 'Y');
+    return 0;
 }
