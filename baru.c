@@ -28,6 +28,36 @@ struct Penyewa {
 
 char payment_date[80];
 
+void title();
+void menuAwal();
+int isFileKosong(const char *filename);
+void bacaKamarDariFile(struct Kamar kamar[], int *jumlahKamar);
+void bacaPenyewaDariFile(struct Penyewa penyewa[], int *jumlahPenyewa);
+void tulisHeaderDaftarKos(FILE *file);
+void simpanKamarKeFile(struct Kamar kamar[], int jumlahKamar);
+void simpanPenyewaKeFile(struct Penyewa penyewa[], int jumlahPenyewa);
+void tambahKamar(struct Kamar kamar[], int *jumlahKamar);
+void cariKamar(struct Kamar kamar[], int jumlahKamar, int nomor);
+void hapusKamar(struct Kamar kamar[], int *jumlahKamar, const char *tipe);
+void cetakStruk(struct Kamar kamar[], struct Penyewa penyewa[], int jumlahPenyewa);
+
+
+
+void title() {
+    printf("==============================================\n");
+    printf("|                                            |\n");
+    printf("|    SSSS  EEEE  RRRR   NN  N  III  AAA      |\n");
+    printf("|   S      E     R   R  N N N   I  A   A     |\n");
+    printf("|    SSS   EEE   RRRR   N  NN   I  AAAAA     |\n");
+    printf("|       S  E     R  R   N   N   I  A   A     |\n");
+    printf("|   SSSS   EEEE  R   R  N   N  III A   A     |\n");
+    printf("|                                            |\n");
+    printf("|                Sernia Kost                 |\n");
+    printf("|    JL. Jimbaran Kiri, Kanan Dikit,Bali     |\n");
+    printf("==============================================\n");
+    system("pause");
+    }; 
+
 int isFileKosong(const char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -298,30 +328,25 @@ void cetakStruk(struct Kamar kamar[], struct Penyewa penyewa[], int jumlahPenyew
     printf("Struk pembayaran telah dicetak ke dalam file 'struk_pembayaran.txt'.\n");
 }
 
-
-
-
-int main() {
+void menuInformasi() {
     struct Kamar kamar[MAX_KAMAR];
     struct Penyewa penyewa[MAX_PENYEWA];
     int jumlahKamar = 0;
     int jumlahPenyewa = 0;
-
-    // bacaKamarDariFile(kamar, &jumlahKamar);
-    // bacaPenyewaDariFile(penyewa, &jumlahPenyewa);
-
-
-
-    // Implementasi logika untuk membaca data kamar dan penyewa dari file jika ada
-
     int pilihan;
+
     do {
-        printf("\nMenu:\n");
-        printf("1. Cari Kamar\n");
-        printf("2. Tambah Kamar\n");
-        printf("3. Hapus Kamar\n");
-        printf("4. Pembayaran Dan Struk\n");
-        printf("0. Keluar\n");
+        printf("==============================================\n");
+        printf("|             INFORMASI DATA KOS             |\n");
+        printf("==============================================\n");
+        printf("|                                            |\n");
+        printf("|  1. Cari Kamar                             |\n");
+        printf("|  2. Tambah Kamar                           |\n");
+        printf("|  3. Hapus Kamar                            |\n");
+        printf("|  4. Pembayaran Dan Struk                   |\n");
+        printf("|  0. Keluar                                 |\n");
+        printf("|                                            |\n");
+        printf("----------------------------------------------\n");
         printf("Pilih menu: ");
         scanf("%d", &pilihan);
 
@@ -339,24 +364,70 @@ int main() {
                 break;
             case 3:
                 {
-                char tipe[20];
-                printf("Masukkan tipe kamar yang ingin dihapus: ");
-                scanf("%s", tipe);
-                hapusKamar(kamar, &jumlahKamar, tipe);
-                break;
+                    char tipe[20];
+                    printf("Masukkan tipe kamar yang ingin dihapus: ");
+                    scanf("%s", tipe);
+                    hapusKamar(kamar, &jumlahKamar, tipe);
+                    break;
                 }
             case 4:
-                pembayaran(penyewa, kamar, jumlahKamar, &jumlahPenyewa);
-                cetakStruk(kamar, penyewa, jumlahPenyewa);
+                pembayaran(&penyewa[jumlahPenyewa], kamar, jumlahKamar, &jumlahPenyewa);
+                cetakStruk(kamar, penyewa, jumlahPenyewa - 1); // Menampilkan struk untuk penyewa terakhir
                 break;
             case 0:
-                printf("Program selesai.\n");
+               menuAwal();
                 break;
             default:
                 printf("Pilihan tidak valid. Silakan pilih lagi.\n");
                 break;
         }
     } while (pilihan != 0);
+}
+
+void menuAwal() {
+    struct Kamar kamar[MAX_KAMAR];
+    struct Penyewa penyewa[MAX_PENYEWA];
+    int jumlahKamar = 0;
+    int jumlahPenyewa = 0;
+    int pilihan;
+
+    printf("==============================================\n");
+    printf("|                SERNIA KOST                 |\n");
+    printf("==============================================\n");
+    printf("|                                            |\n");
+    printf("|  1. Kelola Informasi Data Kos              |\n");
+    printf("|  2. Pembayaran Kos                         |\n");
+    printf("|                                            |\n");
+    printf("----------------------------------------------\n");
+    printf("Masukkan Pilihan : ");
+    scanf("%d", &pilihan);
+
+    switch(pilihan) {
+        case 1:
+            menuInformasi();
+            break;
+        case 2:
+            pembayaran(&penyewa[jumlahPenyewa], kamar, jumlahKamar, &jumlahPenyewa);
+            cetakStruk(kamar, penyewa, jumlahPenyewa - 1); // Menampilkan struk untuk penyewa terakhir
+            break;
+        default:
+            printf("Pilihan tidak valid\n");
+            break;
+    }
+
+}
+
+int main() {
+    int repeat;
+    do {
+        title();
+        menuAwal();
+
+    printf("Apakah anda ingin mengulang?\n");
+    printf("YA (Y) \n");
+    printf("TIDAK (N)\n");
+    scanf(" %c", &repeat);
+    } while (repeat == 'y' || repeat == 'Y');
 
     return 0;
 }
