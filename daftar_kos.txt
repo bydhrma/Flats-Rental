@@ -1,2 +1,0 @@
-Nomor Kamar	Tipe	Harga	Status
-505	standard	200.00	Kosong

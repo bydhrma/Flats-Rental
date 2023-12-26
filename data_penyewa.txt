@@ -1,2 +1,0 @@
-Nama	NIK	No. Telepon	Kamar	Lama Sewa	Total Pembayaran
-karin	2303030	0203030	101	1	800000.00
