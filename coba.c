@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 
 #define MAX_KOS 5
 
@@ -27,33 +26,30 @@ struct Kos {
 
 struct Kos kos;
 struct Penyewa penyewa;
-
-int isNameEntered = 0;
-float electricityPrice, waterPrice, total_price, total_electric, total_water, penalty, discount;
-int roomType, jumlahBulan;
+float electricityPrice, waterPrice, total_price, total_electric, total_water, discount;
+int jumlahBulan;
 char type, electricity, water;
 char payment_date[80];
 char filename[80];
 char repeat;
 
 void title();
-int calculatePrice();
 void selectType();
+int infoKos();
+int calculatePrice(struct Kos kos); // Mengubah deklarasi calculatePrice()
+void electricAndWaterCondition();
 void getTime();
 void struk();
 void printToStrukFile();
-int infoKos();
-void tampilkanInfoKos(struct Kos kos[], int jumlah, enum TipeKos tipe);
+
 
 //jea,bayu,karin
 int main (){
     do{
-        system("cls");
-
     title();
     selectType();
     infoKos();
-    calculatePrice();
+    calculatePrice(kos);
     struk();
     printToStrukFile();
 
@@ -196,8 +192,7 @@ int infoKos() {
 }
 
 //bayu
-int calculatePrice() {
-
+int calculatePrice(struct Kos kos) {
     if (jumlahBulan > 12) {
         discount = 0.01 * jumlahBulan * kos.harga;
         total_price = (jumlahBulan * kos.harga) - discount;
@@ -207,14 +202,14 @@ int calculatePrice() {
 
         discount = 0.01 * jumlahBulan * waterPrice;
         total_water = (jumlahBulan * waterPrice) - discount;
+    } else {
+        total_price = jumlahBulan * kos.harga;
+        total_electric = jumlahBulan * electricityPrice;
+        total_water = jumlahBulan * waterPrice;
     }
 
-    total_price = jumlahBulan * kos.harga;
-    total_electric = jumlahBulan * electricityPrice;
-    total_water = jumlahBulan * waterPrice;
-
     return total_price, total_electric;
- }   
+}
 
 //jea
 void electricAndWaterCondition() {
