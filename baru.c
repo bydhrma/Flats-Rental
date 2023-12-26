@@ -29,6 +29,7 @@ struct Penyewa {
 char payment_date[80];
 
 void title();
+void aturan();
 void menuAwal();
 int isFileKosong(const char *filename);
 void bacaKamarDariFile(struct Kamar kamar[], int *jumlahKamar);
@@ -39,8 +40,71 @@ void simpanPenyewaKeFile(struct Penyewa penyewa[], int jumlahPenyewa);
 void tambahKamar(struct Kamar kamar[], int *jumlahKamar);
 void cariKamar(struct Kamar kamar[], int jumlahKamar, int nomor);
 void hapusKamar(struct Kamar kamar[], int *jumlahKamar, const char *tipe);
-void cetakStruk(struct Kamar kamar[], struct Penyewa penyewa[], int jumlahPenyewa);
+void cetakStruk(struct Kamar kamar, struct Penyewa penyewa, float biayaAir, float biayaListrik);
+void pembayaran(struct Penyewa penyewa[], struct Kamar kamar[], int jumlahKamar, int *jumlahPenyewa);
 
+int main() {
+    int repeat;
+    struct Kamar kamar[MAX_KAMAR];
+    struct Penyewa penyewa[MAX_PENYEWA];
+    int jumlahKamar = 0;
+    int jumlahPenyewa = 0;
+    int pilihan;
+
+    title();
+    aturan();
+
+    do {
+        printf("==============================================\n");
+        printf("|             INFORMASI DATA KOS             |\n");
+        printf("==============================================\n");
+        printf("|                                            |\n");
+        printf("|  1. Cari Kamar                             |\n");
+        printf("|  2. Tambah Kamar                           |\n");
+        printf("|  3. Hapus Kamar                            |\n");
+        printf("|  4. Pembayaran Dan Struk                   |\n");
+        printf("|  0. Keluar                                 |\n");
+        printf("|                                            |\n");
+        printf("----------------------------------------------\n");
+        printf("Pilih menu: ");
+        scanf("%d", &pilihan);
+
+        switch (pilihan) {
+            case 1:
+                {
+                    int nomor;
+                    printf("Masukkan nomor kamar yang ingin dicari: ");
+                    scanf("%d", &nomor);
+                    cariKamar(kamar, jumlahKamar, nomor);
+                    break;
+                }
+            case 2:
+                tambahKamar(kamar, &jumlahKamar);
+                break;
+            case 3:
+                {
+                    char tipe[20];
+                    printf("Masukkan tipe kamar yang ingin dihapus: ");
+                    scanf("%s", tipe);
+                    hapusKamar(kamar, &jumlahKamar, tipe);
+                    break;
+                }
+            case 4:
+               pembayaran(&penyewa[jumlahPenyewa], kamar, jumlahKamar, &jumlahPenyewa);
+                 // Menampilkan struk untuk penyewa terakhir
+                break;
+            case 0:
+               exit(0);
+                break;
+            default:
+                printf("Pilihan tidak valid. Silakan pilih lagi.\n");
+                break;
+        }
+
+} while (pilihan != 0);
+
+return 0;
+}
 
 
 void title() {
@@ -57,6 +121,33 @@ void title() {
     printf("==============================================\n");
     system("pause");
     }; 
+
+    void aturan() {
+        printf("================================================\n");
+        printf("|                  Aturan                      |\n");
+        printf("================================================\n");
+        printf("|                Pembayaran Sewa               |\n");
+        printf("| Bayar sewa tepat waktu sesuai kesepakatan.   |\n");
+        printf("|                                              |\n");
+        printf("|                Kebersihan                    |\n");
+        printf("| Jaga kebersihan ruangan pribadi dan fasilitas|\n");
+        printf("|                  bersama.                    |\n");
+        printf("|                                              |\n");
+        printf("|                Kebisingan                    |\n");
+        printf("| Hormati waktu istirahat dan hindari          |\n");
+        printf("|           kebisingan berlebihan.             |\n");
+        printf("|                                              |\n");
+        printf("|                Pengunjung                    |\n");
+        printf("| Beri tahu sebelum ada pengunjung yang        |\n");
+        printf("|              menginap semalam.               |\n");
+        printf("|                                              |\n");
+        printf("|                Kerusakan Properti            |\n");
+        printf("| Laporkan dan tanggung jawab atas kerusakan   |\n");
+        printf("|                   yang terjadi.              |\n");
+        printf("|                                              |\n");
+        printf("=============================================== \n");
+        system("pause");
+    }
 
 int isFileKosong(const char *filename) {
     FILE *file = fopen(filename, "r");
@@ -221,25 +312,81 @@ void hapusKamar(struct Kamar kamar[], int *jumlahKamar, const char *tipe) {
 }
 
 // Fungsi untuk melakukan pembayaran
-void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, int *jumlahPenyewa) {
+void cetakStruk(struct Kamar kamar, struct Penyewa penyewa, float biayaAir, float biayaListrik) {
+    time_t rawtime;
+    struct tm *timeinfo;
+
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    char payment_date[11]; // Definisikan payment_date untuk menyimpan tanggal
+
+    strftime(payment_date, sizeof(payment_date), "%Y-%m-%d", timeinfo);
+
+    printf("\n");
+    printf("==================================================================\n");
+    printf("                     TOTAL PEMBAYARAN KOS                         \n");
+    printf("==================================================================\n");
+    printf("   Nama Penyewa           : %s \n", penyewa.nama);
+    printf("   NIK Penyewa            : %s \n", penyewa.NIK);
+    printf("   No Hp Penyewa          : %s \n", penyewa.noTelepon);
+    printf("   Tipe                   : %s \n", kamar.tipe);
+    printf("   Tanggal                : %s \n", payment_date);
+    printf("   Jumlah Bulan           : %d \n", penyewa.lamaSewa);
+    printf("   Harga Kamar Perbulan   : Rp. %.2f  \n", kamar.harga);
+    printf("   Biaya Kuota Listrik    : Rp. %.2f  \n", biayaListrik);
+    printf("   Biaya Kuota Air        : Rp. %.2f  \n", biayaAir);
+    printf("==================================================================\n");
+    printf("   Total Biaya            : Rp. %.2f   \n", penyewa.totalPembayaran);
+    printf("==================================================================\n");
+
+    FILE *file = fopen("struk_pembayaran.txt", "w");
+    if (file == NULL) {
+        printf("Gagal membuat file struk pembayaran.\n");
+        return;
+    }
+
+    fprintf(file, "\n");
+    fprintf(file, "==================================================================\n");
+    fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
+    fprintf(file, "==================================================================\n");
+    fprintf(file, "   Nama Penyewa           : %s \n", penyewa.nama);
+    fprintf(file, "   NIK Penyewa            : %s \n", penyewa.NIK);
+    fprintf(file, "   No Hp Penyewa          : %s \n", penyewa.noTelepon);
+    fprintf(file, "   Tanggal                : %s \n", payment_date);
+    fprintf(file, "   Jumlah Bulan           : %d \n", penyewa.lamaSewa);
+    fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", kamar.harga);
+    fprintf(file, "   Biaya Kuota Listrik    : Rp.%.2f  \n", biayaListrik);
+    fprintf(file, "   Biaya Kuota Air        : Rp.%.2f  \n", biayaAir);
+    fprintf(file, "==================================================================\n");
+    fprintf(file, "   Total Biaya            : Rp.%.2f   \n", penyewa.totalPembayaran);
+    fprintf(file, "==================================================================\n");
+
+    fclose(file);
+    printf("Struk pembayaran telah dicetak ke dalam file 'struk_pembayaran.txt'.\n");
+}
+
+void pembayaran(struct Penyewa penyewa[], struct Kamar kamar[], int jumlahKamar, int *jumlahPenyewa) {
     printf("Masukkan nama penyewa: ");
     scanf(" %[^\n]s", penyewa[*jumlahPenyewa].nama);
     printf("Masukkan NIK: ");
     scanf(" %[^\n]s", penyewa[*jumlahPenyewa].NIK);
     printf("Masukkan nomor telepon: ");
     scanf(" %[^\n]s", penyewa[*jumlahPenyewa].noTelepon);
-    
+
     int nomorKamar, lamaSewa, gunaAir, gunaListrik;
     printf("Masukkan nomor kamar yang disewa: ");
     scanf("%d", &nomorKamar);
     printf("Masukkan lama sewa (bulan): ");
     scanf("%d", &lamaSewa);
-    printf("Apakah ingin menggunakan kouta air? (1 untuk Ya, 0 untuk Tidak): ");
+    printf("Apakah ingin menggunakan kuota air? (1 untuk Ya, 0 untuk Tidak): ");
     scanf("%d", &gunaAir);
-    printf("Apakah ingin menggunakan kouta listrik? (1 untuk Ya, 0 untuk Tidak): ");
+    printf("Apakah ingin menggunakan kuota listrik? (1 untuk Ya, 0 untuk Tidak): ");
     scanf("%d", &gunaListrik);
 
     int found = 0;
+    float biayaAir = gunaAir ? 150000 * lamaSewa : 0; // Biaya air per bulan
+    float biayaListrik = gunaListrik ? 250000 * lamaSewa : 0; // Biaya listrik per bulan
+
     for (int i = 0; i < jumlahKamar; ++i) {
         if (kamar[i].nomor == nomorKamar && !kamar[i].isTerisi) {
             penyewa[*jumlahPenyewa].kamarSewa = nomorKamar;
@@ -249,9 +396,6 @@ void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, 
 
             // Menghitung total pembayaran
             float hargaKamar = kamar[i].harga * lamaSewa;
-            float biayaAir = gunaAir ? 150000 * lamaSewa : 0; // Biaya air per bulan
-            float biayaListrik = gunaListrik ? 250000 * lamaSewa : 0; // Biaya listrik per bulan
-
             penyewa[*jumlahPenyewa].totalPembayaran = hargaKamar + biayaAir + biayaListrik;
 
             // Ubah status kamar menjadi terisi
@@ -266,163 +410,14 @@ void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, 
         simpanPenyewaKeFile(penyewa, *jumlahPenyewa + 1);
         simpanKamarKeFile(kamar, jumlahKamar);
         (*jumlahPenyewa)++;
+
+        // Cetak struk pembayaran
+        cetakStruk(kamar[penyewa[*jumlahPenyewa - 1].kamarSewa - 1], penyewa[*jumlahPenyewa - 1], biayaAir, biayaListrik);
     } else {
         printf("Gagal melakukan pembayaran. Kamar tidak tersedia atau sudah terisi.\n");
     }
 }
 
-void cetakStruk(struct Kamar kamar[], struct Penyewa penyewa[], int jumlahPenyewa) {
-    time_t rawtime;
-    struct tm *timeinfo;
 
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-    strftime(payment_date, sizeof(payment_date), "%Y-%m-%d", timeinfo);
 
-    printf("\n");
-    printf("==================================================================\n");
-    printf("                     TOTAL PEMBAYARAN KOS                         \n");
-    printf("==================================================================\n");
-    printf("   Nama Penyewa           : %s \n", penyewa[jumlahPenyewa - 1].nama);
-    printf("   NIK Penyewa            : %s \n", penyewa[jumlahPenyewa - 1].NIK);
-    printf("   No Hp Penyewa          : %s \n", penyewa[jumlahPenyewa - 1].noTelepon);
-    printf("   Tipe                   : %s \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].tipe);
-    printf("   Tanggal                : %s \n", payment_date);
-    printf("   Jumlah Bulan           : %d \n", penyewa[jumlahPenyewa - 1].lamaSewa);
-    printf("   Harga Kamar Perbulan   : Rp. %.2f  \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].harga);
-    printf("   Biaya Kuota Listrik    : Rp. %.2f  \n", penyewa[jumlahPenyewa - 1].gunaListrik ? (250000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
-    printf("   Biaya Kuota Air        : Rp. %.2f  \n", penyewa[jumlahPenyewa - 1].gunaAir ? (150000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
-    printf("==================================================================\n");
-    printf("   Total Biaya            : Rp. %.2f   \n", penyewa[jumlahPenyewa - 1].totalPembayaran);
-    printf("==================================================================\n");
 
-    FILE *file = fopen("struk_pembayaran.txt", "w");
-    if (file == NULL) {
-        printf("Gagal membuat file struk pembayaran.\n");
-        return;
-    }
-
-    fprintf(file, "\n");
-    fprintf(file, "==================================================================\n");
-    fprintf(file, "                     TOTAL PEMBAYARAN KOS                         \n");
-    fprintf(file, "==================================================================\n");
-    fprintf(file, "   Nama Penyewa           : %s \n", penyewa[jumlahPenyewa - 1].nama);
-    fprintf(file, "   NIK Penyewa            : %s \n", penyewa[jumlahPenyewa - 1].NIK);
-    fprintf(file, "   No Hp Penyewa          : %s \n", penyewa[jumlahPenyewa - 1].noTelepon);
-    fprintf(file, "   Tipe                   : %s \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].tipe);
-    fprintf(file, "   Tanggal                : %s \n", payment_date);
-    fprintf(file, "   Jumlah Bulan           : %d \n", penyewa[jumlahPenyewa - 1].lamaSewa);
-    fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].harga);
-    fprintf(file, "   Biaya Kuota Listrik    : Rp.%.2f  \n", penyewa[jumlahPenyewa - 1].gunaListrik ? (250000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
-    fprintf(file, "   Biaya Kuota Air        : Rp.%.2f  \n", penyewa[jumlahPenyewa - 1].gunaAir ? (150000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
-    fprintf(file, "==================================================================\n");
-    fprintf(file, "   Total Biaya            : Rp.%.2f   \n", penyewa[jumlahPenyewa - 1].totalPembayaran);
-    fprintf(file, "==================================================================\n");
-
-    fclose(file);
-    printf("Struk pembayaran telah dicetak ke dalam file 'struk_pembayaran.txt'.\n");
-}
-
-void menuInformasi() {
-    struct Kamar kamar[MAX_KAMAR];
-    struct Penyewa penyewa[MAX_PENYEWA];
-    int jumlahKamar = 0;
-    int jumlahPenyewa = 0;
-    int pilihan;
-
-    do {
-        printf("==============================================\n");
-        printf("|             INFORMASI DATA KOS             |\n");
-        printf("==============================================\n");
-        printf("|                                            |\n");
-        printf("|  1. Cari Kamar                             |\n");
-        printf("|  2. Tambah Kamar                           |\n");
-        printf("|  3. Hapus Kamar                            |\n");
-        printf("|  4. Pembayaran Dan Struk                   |\n");
-        printf("|  0. Keluar                                 |\n");
-        printf("|                                            |\n");
-        printf("----------------------------------------------\n");
-        printf("Pilih menu: ");
-        scanf("%d", &pilihan);
-
-        switch (pilihan) {
-            case 1:
-                {
-                    int nomor;
-                    printf("Masukkan nomor kamar yang ingin dicari: ");
-                    scanf("%d", &nomor);
-                    cariKamar(kamar, jumlahKamar, nomor);
-                    break;
-                }
-            case 2:
-                tambahKamar(kamar, &jumlahKamar);
-                break;
-            case 3:
-                {
-                    char tipe[20];
-                    printf("Masukkan tipe kamar yang ingin dihapus: ");
-                    scanf("%s", tipe);
-                    hapusKamar(kamar, &jumlahKamar, tipe);
-                    break;
-                }
-            case 4:
-                pembayaran(&penyewa[jumlahPenyewa], kamar, jumlahKamar, &jumlahPenyewa);
-                cetakStruk(kamar, penyewa, jumlahPenyewa - 1); // Menampilkan struk untuk penyewa terakhir
-                break;
-            case 0:
-               menuAwal();
-                break;
-            default:
-                printf("Pilihan tidak valid. Silakan pilih lagi.\n");
-                break;
-        }
-    } while (pilihan != 0);
-}
-
-void menuAwal() {
-    struct Kamar kamar[MAX_KAMAR];
-    struct Penyewa penyewa[MAX_PENYEWA];
-    int jumlahKamar = 0;
-    int jumlahPenyewa = 0;
-    int pilihan;
-
-    printf("==============================================\n");
-    printf("|                SERNIA KOST                 |\n");
-    printf("==============================================\n");
-    printf("|                                            |\n");
-    printf("|  1. Kelola Informasi Data Kos              |\n");
-    printf("|  2. Pembayaran Kos                         |\n");
-    printf("|                                            |\n");
-    printf("----------------------------------------------\n");
-    printf("Masukkan Pilihan : ");
-    scanf("%d", &pilihan);
-
-    switch(pilihan) {
-        case 1:
-            menuInformasi();
-            break;
-        case 2:
-            pembayaran(&penyewa[jumlahPenyewa], kamar, jumlahKamar, &jumlahPenyewa);
-            cetakStruk(kamar, penyewa, jumlahPenyewa - 1); // Menampilkan struk untuk penyewa terakhir
-            break;
-        default:
-            printf("Pilihan tidak valid\n");
-            break;
-    }
-
-}
-
-int main() {
-    int repeat;
-    do {
-        title();
-        menuAwal();
-
-    printf("Apakah anda ingin mengulang?\n");
-    printf("YA (Y) \n");
-    printf("TIDAK (N)\n");
-    scanf(" %c", &repeat);
-    } while (repeat == 'y' || repeat == 'Y');
-
-    return 0;
-}

@@ -1,0 +1,2 @@
+Nama	NIK	No. Telepon	Kamar	Lama Sewa	Total Pembayaran	Guna Air	Guna Listrik
+bayu	2305551157	0896712723300	101	1	800000.00	0	0
