@@ -1,2 +1,0 @@
-Nomor Kamar	Tipe	Harga	Status
-505	standard	800000.00	0

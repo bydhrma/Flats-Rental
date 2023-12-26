@@ -223,11 +223,11 @@ void hapusKamar(struct Kamar kamar[], int *jumlahKamar, const char *tipe) {
 // Fungsi untuk melakukan pembayaran
 void pembayaran(struct Penyewa *penyewa, struct Kamar kamar[], int jumlahKamar, int *jumlahPenyewa) {
     printf("Masukkan nama penyewa: ");
-    scanf("%s", penyewa[*jumlahPenyewa].nama);
+    scanf(" %[^\n]s", penyewa[*jumlahPenyewa].nama);
     printf("Masukkan NIK: ");
-    scanf("%s", penyewa[*jumlahPenyewa].NIK);
+    scanf(" %[^\n]s", penyewa[*jumlahPenyewa].NIK);
     printf("Masukkan nomor telepon: ");
-    scanf("%s", penyewa[*jumlahPenyewa].noTelepon);
+    scanf(" %[^\n]s", penyewa[*jumlahPenyewa].noTelepon);
     
     int nomorKamar, lamaSewa, gunaAir, gunaListrik;
     printf("Masukkan nomor kamar yang disewa: ");
@@ -279,27 +279,22 @@ void cetakStruk(struct Kamar kamar[], struct Penyewa penyewa[], int jumlahPenyew
     timeinfo = localtime(&rawtime);
     strftime(payment_date, sizeof(payment_date), "%Y-%m-%d", timeinfo);
 
-    float total_price = penyewa[jumlahPenyewa - 1].totalPembayaran - (150000 * penyewa[jumlahPenyewa - 1].lamaSewa) - (250000 * penyewa[jumlahPenyewa - 1].lamaSewa);
-    float total_electric = penyewa[jumlahPenyewa - 1].gunaListrik ? (250000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0;
-    float total_water = penyewa[jumlahPenyewa - 1].gunaAir ? (150000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0;
-
-   printf("\n");
-   printf("==================================================================\n");
-   printf("                     TOTAL PEMBAYARAN KOS                         \n");
-   printf("==================================================================\n");
-   printf("   Nama Penyewa           : %s \n", penyewa[jumlahPenyewa - 1].nama);
-   printf("   NIK Penyewa            : %s \n", penyewa[jumlahPenyewa - 1].NIK);
-   printf("   No Hp Penyewa          : %s \n", penyewa[jumlahPenyewa - 1].noTelepon);
-   printf("   Tipe                   : %s \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].tipe);
-   printf("   Tanggal                : %s \n", payment_date);
-   printf("   Jumlah Bulan           : %d \n", penyewa[jumlahPenyewa - 1].lamaSewa);
-   printf("   Harga Kamar Perbulan   : Rp. %.2f  \n", penyewa[jumlahPenyewa - 1].totalPembayaran - penyewa[jumlahPenyewa - 1].gunaAir * 150000 - penyewa[jumlahPenyewa - 1].gunaListrik * 250000);
-   printf("   Biaya Kuota Listrik    : Rp. %.2f  \n", penyewa[jumlahPenyewa - 1].gunaListrik * 250000);
-   printf("   Biaya Kuota Air        : Rp. %.2f  \n", penyewa[jumlahPenyewa - 1].gunaAir * 150000);
-   printf("==================================================================\n");
-   printf("   Total Biaya            : Rp. %.2f   \n", penyewa[jumlahPenyewa - 1].totalPembayaran);
-   printf("==================================================================\n");
-   
+    printf("\n");
+    printf("==================================================================\n");
+    printf("                     TOTAL PEMBAYARAN KOS                         \n");
+    printf("==================================================================\n");
+    printf("   Nama Penyewa           : %s \n", penyewa[jumlahPenyewa - 1].nama);
+    printf("   NIK Penyewa            : %s \n", penyewa[jumlahPenyewa - 1].NIK);
+    printf("   No Hp Penyewa          : %s \n", penyewa[jumlahPenyewa - 1].noTelepon);
+    printf("   Tipe                   : %s \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].tipe);
+    printf("   Tanggal                : %s \n", payment_date);
+    printf("   Jumlah Bulan           : %d \n", penyewa[jumlahPenyewa - 1].lamaSewa);
+    printf("   Harga Kamar Perbulan   : Rp. %.2f  \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].harga);
+    printf("   Biaya Kuota Listrik    : Rp. %.2f  \n", penyewa[jumlahPenyewa - 1].gunaListrik ? (250000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
+    printf("   Biaya Kuota Air        : Rp. %.2f  \n", penyewa[jumlahPenyewa - 1].gunaAir ? (150000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
+    printf("==================================================================\n");
+    printf("   Total Biaya            : Rp. %.2f   \n", penyewa[jumlahPenyewa - 1].totalPembayaran);
+    printf("==================================================================\n");
 
     FILE *file = fopen("struk_pembayaran.txt", "w");
     if (file == NULL) {
@@ -317,11 +312,11 @@ void cetakStruk(struct Kamar kamar[], struct Penyewa penyewa[], int jumlahPenyew
     fprintf(file, "   Tipe                   : %s \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].tipe);
     fprintf(file, "   Tanggal                : %s \n", payment_date);
     fprintf(file, "   Jumlah Bulan           : %d \n", penyewa[jumlahPenyewa - 1].lamaSewa);
-    fprintf(file, "   Harga Kamar Perbulan   : Rp.%2.f  \n", total_price);
-    fprintf(file, "   Biaya Kuota Listrik    : Rp.%2.f  \n", total_electric);
-    fprintf(file, "   Biaya Kuota Air        : Rp.%2.f  \n", total_water);
+    fprintf(file, "   Harga Kamar Perbulan   : Rp.%.2f  \n", kamar[penyewa[jumlahPenyewa - 1].kamarSewa - 1].harga);
+    fprintf(file, "   Biaya Kuota Listrik    : Rp.%.2f  \n", penyewa[jumlahPenyewa - 1].gunaListrik ? (250000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
+    fprintf(file, "   Biaya Kuota Air        : Rp.%.2f  \n", penyewa[jumlahPenyewa - 1].gunaAir ? (150000 * penyewa[jumlahPenyewa - 1].lamaSewa) : 0);
     fprintf(file, "==================================================================\n");
-    fprintf(file, "   Total Biaya            : Rp.%2.f   \n", penyewa[jumlahPenyewa - 1].totalPembayaran);
+    fprintf(file, "   Total Biaya            : Rp.%.2f   \n", penyewa[jumlahPenyewa - 1].totalPembayaran);
     fprintf(file, "==================================================================\n");
 
     fclose(file);
